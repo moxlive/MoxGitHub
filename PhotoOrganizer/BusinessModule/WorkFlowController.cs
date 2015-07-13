@@ -35,6 +35,7 @@ namespace PhotoOrganizer.BusinessModule
             foreach (PhotoGroup group in groups)
             {
                 Bitmap newPic = photoModifier.CombinePicture(group);
+               
                 fileWriter.SavePic(group, newPic);
             }
 

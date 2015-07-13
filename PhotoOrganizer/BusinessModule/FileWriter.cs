@@ -18,8 +18,24 @@ namespace PhotoOrganizer.BusinessModule
 
         public bool SavePic(PhotoGroup group, Bitmap newPic)
         {
-            string outputFolder = ForceFolderStracture(group);
-            newPic.Save(outputFolder + group.CustomSeqNum + ".jpg");
+            try
+            {
+                if (newPic == null)
+                {
+                    return false;
+                }
+                string outputFolder = ForceFolderStracture(group);
+                //todo : allow user to set it 
+                newPic.Save(outputFolder + group.ScanSeqNum + ".jpg", ImageFormat.Jpeg);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                newPic.Dispose();
+            }
+
             return true;
         }
 

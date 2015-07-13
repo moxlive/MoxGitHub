@@ -8,5 +8,17 @@ namespace PhotoOrganizer.BusinessModule
 {
     public class SettingManager
     {
+        private string settingFilePath = @"";
+
+
+        private void SaveSetting()
+        {
+
+        }
+
+        private void ReadSetting()
+        {
+              
+        }
     }
 }
