@@ -16,6 +16,7 @@ namespace PhotoOrganizer.BusinessModule
         FileWriter fileWriter;
         PhotoModifier photoModifier;
 
+
         public WorkFlowController()
         {
             folderScanner = new FolderScanner();
@@ -28,16 +29,17 @@ namespace PhotoOrganizer.BusinessModule
 
         public void StartScan()
         {
-            IList<PhotoGroup> groups = folderScanner.FindNewPhotoGroups();
+            SettingManager settingManager = new SettingManager();
+            settingManager.SaveSetting("setting1", "value1");
+            string value = settingManager.ReadSettingString("setting1");
+            //IList<PhotoGroup> groups = folderScanner.FindNewPhotoGroups();          
 
-          
-
-            foreach (PhotoGroup group in groups)
-            {
-                Bitmap newPic = photoModifier.CombinePicture(group);
+            //foreach (PhotoGroup group in groups)
+            //{
+            //    Bitmap newPic = photoModifier.CombinePicture(group);
                
-                fileWriter.SavePic(group, newPic);
-            }
+            //    fileWriter.SavePic(group, newPic);
+            //}
 
         }
 
