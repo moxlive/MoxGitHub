@@ -12,6 +12,13 @@ namespace PhotoOrganizer.BusinessModule
 {
     public class PhotoModifier
     {
+        ISettingManager settingManager;
+
+        public PhotoModifier(ISettingManager settingMgr)
+        {
+            settingManager = settingMgr;
+        }
+
         public Bitmap CombinePicture(PhotoGroup group)
         {
             Photo front = group.Front;

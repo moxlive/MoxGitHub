@@ -29,6 +29,7 @@ namespace PhotoOrganizer
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WorkFlowController controller = new WorkFlowController();
+            controller.Initialize();
             controller.StartScan();
         }
     }

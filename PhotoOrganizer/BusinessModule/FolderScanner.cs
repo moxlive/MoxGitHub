@@ -8,6 +8,7 @@ using System.IO;
 using PhotoOrganizer.BusinessModule.Photos;
 using PhotoOrganizer.BusinessModule.MatchRules;
 using PhotoOrganizer.BusinessModule.Visitors;
+using PhotoOrganizer.BusinessModule.Common;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -16,19 +17,23 @@ namespace PhotoOrganizer.BusinessModule
     /// </summary>
     public class FolderScanner
     {
-        private string scanPath = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
+        
         private List<FolderVisitor> visitors;
+        ISettingManager settingManager;
 
         private const string visitorKey_RawScan = "RawScan";
         private const string visitorKey_ScanDate = "ScanDate";
         private const string visitorKey_CustomSeqNum = "CustomSeqNum";
         private const string visitorKey_ScanSeqNum = "ScanSeqNum";
 
-        private const string frontPicName = "089.jpg";
-        private const string backPicName = "090.jpg";
+        private string frontPicName = "089.jpg";
+        private string backPicName = "090.jpg";
+        private string scanPath = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
 
-        public void InitVisitors()
+        public void InitVisitors(ISettingManager settingMgr)
         {
+            settingManager = settingMgr;
+            LoadSettings();
             visitors = new List<FolderVisitor>();
             List<IFolderMatchRule> rules = new List<IFolderMatchRule>();
 
@@ -139,6 +144,13 @@ namespace PhotoOrganizer.BusinessModule
             };
 
             return pg;
+        }
+
+        private void LoadSettings()
+        {
+            frontPicName = settingManager.ReadSettingString(Constants.FrontPictureName);
+            backPicName = settingManager.ReadSettingString(Constants.BackPictureName);
+            scanPath = settingManager.ReadSettingString(Constants.ScanBasePath);
         }
        
     }

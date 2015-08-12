@@ -8,12 +8,12 @@ using System.IO;
 
 namespace PhotoOrganizer.BusinessModule
 {
-    public class SettingManager
+    public class SettingManager : ISettingManager
     {
         private const string settingFilePath = @"PhotoOrganizerSettings.xml";
         private const string attSearchPath = @"//SettingNode[@SettingName='{0}']";
         private const string settingNodeName = @"SettingNode";
-        private const string settingNodeAttName = "@SettingName";
+        private const string settingNodeAttName = @"SettingName";
 
         public void SaveSetting(string settingName, string value)
         {
@@ -41,15 +41,24 @@ namespace PhotoOrganizer.BusinessModule
 
         public string ReadSettingString(string settingName)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(settingFilePath);
-            XmlElement root = doc.DocumentElement;
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(settingFilePath);
+                XmlElement root = doc.DocumentElement;
 
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
-            nsmgr.AddNamespace("", "");
-            string xPathString = string.Format(attSearchPath, settingName);            
-            XmlNode selected = root.SelectSingleNode(xPathString, nsmgr);
-            return selected.InnerText;
+                XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+                nsmgr.AddNamespace("", "");
+                string xPathString = string.Format(attSearchPath, settingName);
+                XmlNode selected = root.SelectSingleNode(xPathString, nsmgr);
+                return selected.InnerText;
+            }
+            catch
+            {
+               
+            }
+
+             return "";            
         }
 
         private static void CreateNewElement(string settingName, string value, XmlDocument doc, XmlNode parent)

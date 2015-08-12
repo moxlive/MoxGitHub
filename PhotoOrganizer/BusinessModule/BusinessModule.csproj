@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="FolderScanner.cs" />
+    <Compile Include="ISettingManager.cs" />
     <Compile Include="MatchRules\Rules.cs" />
     <Compile Include="PhotoModifier.cs" />
     <Compile Include="Photo\Photo.cs" />

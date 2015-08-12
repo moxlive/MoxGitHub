@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using PhotoOrganizer.BusinessModule.Photos;
+using PhotoOrganizer.BusinessModule.Common;
 using System.Drawing.Imaging;
 using System.Drawing;
 
@@ -14,7 +15,14 @@ namespace PhotoOrganizer.BusinessModule
     {
 
         string outputDir = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
-            
+        
+        ISettingManager settingManager;
+
+        public FileWriter(ISettingManager settingMgr)
+        {
+            settingManager = settingMgr;
+            LoadSettings();
+        }
 
         public bool SavePic(PhotoGroup group, Bitmap newPic)
         {
@@ -47,6 +55,12 @@ namespace PhotoOrganizer.BusinessModule
                 Directory.CreateDirectory(outputFolder);
             }
             return outputFolder;
+        }
+
+        private void LoadSettings()
+        {
+            outputDir = settingManager.ReadSettingString(Constants.OverviewFolderBasePath);
+
         }
     }
 }
