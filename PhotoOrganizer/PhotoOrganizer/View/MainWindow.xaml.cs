@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PhotoOrganizer.BusinessModule;
+using PhotoOrganizer.Common;
 
 namespace PhotoOrganizer
 {
@@ -21,6 +22,8 @@ namespace PhotoOrganizer
     /// </summary>
     public partial class MainWindow : Window
     {
+        Settings setting = new Settings();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,7 +33,32 @@ namespace PhotoOrganizer
         {
             WorkFlowController controller = new WorkFlowController();
             controller.Initialize();
-            controller.StartScan();
+            //controller.StartScan();
+            //TestBinding();
+            this.DataContext = setting;
+        }
+      
+        /// <summary>
+        /// only for testing
+        /// </summary>
+        private void TestBinding()
+        {
+            //Binding b2 = new Binding();
+            //b2.Source = setting;
+            //b2.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //b2.Path = new PropertyPath("ScanBasePath");
+            ////b2.NotifyOnSourceUpdated = true;
+            //b2.Mode = BindingMode.TwoWay;
+            //this.ScanPathTextBox.SetBinding(TextBox.TextProperty, b2);
+
+            Binding b = new Binding();
+            b.Source = setting;
+            b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            b.Path = new PropertyPath("OverviewFolderBasePath");
+            b.Mode = BindingMode.TwoWay;
+            //b.NotifyOnSourceUpdated = true;
+            this.OutputPathTextBox.SetBinding(TextBox.TextProperty, b);
+                     
         }
     }
 }
