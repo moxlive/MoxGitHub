@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\Settings.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="FolderScanner.cs" />
     <Compile Include="ISettingManager.cs" />

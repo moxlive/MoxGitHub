@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PhotoOrganizer.BusinessModule;
-using PhotoOrganizer.Common;
+using PhotoOrganizer.BusinessModule.Common;
+using PhotoOrganizer.ViewModel;
 
 namespace PhotoOrganizer
 {
@@ -22,7 +23,8 @@ namespace PhotoOrganizer
     /// </summary>
     public partial class MainWindow : Window
     {
-        Settings setting = new Settings();
+    
+        MainViewModel vm;
 
         public MainWindow()
         {
@@ -31,34 +33,20 @@ namespace PhotoOrganizer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            WorkFlowController controller = new WorkFlowController();
-            controller.Initialize();
-            //controller.StartScan();
-            //TestBinding();
-            this.DataContext = setting;
+            vm = new MainViewModel(this);
         }
       
         /// <summary>
         /// only for testing
         /// </summary>
-        private void TestBinding()
-        {
-            //Binding b2 = new Binding();
-            //b2.Source = setting;
-            //b2.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            //b2.Path = new PropertyPath("ScanBasePath");
-            ////b2.NotifyOnSourceUpdated = true;
-            //b2.Mode = BindingMode.TwoWay;
-            //this.ScanPathTextBox.SetBinding(TextBox.TextProperty, b2);
-
-            Binding b = new Binding();
-            b.Source = setting;
-            b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            b.Path = new PropertyPath("OverviewFolderBasePath");
-            b.Mode = BindingMode.TwoWay;
-            //b.NotifyOnSourceUpdated = true;
-            this.OutputPathTextBox.SetBinding(TextBox.TextProperty, b);
-                     
-        }
+        //private void TestBinding()
+        //{
+        //    Binding b = new Binding();
+        //    b.Source = setting;
+        //    b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+        //    b.Path = new PropertyPath("OverviewFolderBasePath");
+        //    b.Mode = BindingMode.TwoWay;
+        //    this.OutputPathTextBox.SetBinding(TextBox.TextProperty, b);                     
+        //}
     }
 }

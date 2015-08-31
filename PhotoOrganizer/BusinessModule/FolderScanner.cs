@@ -19,7 +19,7 @@ namespace PhotoOrganizer.BusinessModule
     {
         
         private List<FolderVisitor> visitors;
-        ISettingManager settingManager;
+        Settings settings;
 
         private const string visitorKey_RawScan = "RawScan";
         private const string visitorKey_ScanDate = "ScanDate";
@@ -30,9 +30,9 @@ namespace PhotoOrganizer.BusinessModule
         private string backPicName = "090.jpg";
         private string scanPath = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
 
-        public void InitVisitors(ISettingManager settingMgr)
+        public void InitVisitors(Settings settings)
         {
-            settingManager = settingMgr;
+            this.settings = settings;
             LoadSettings();
             visitors = new List<FolderVisitor>();
             List<IFolderMatchRule> rules = new List<IFolderMatchRule>();
@@ -148,9 +148,9 @@ namespace PhotoOrganizer.BusinessModule
 
         private void LoadSettings()
         {
-            frontPicName = settingManager.ReadSettingString(Constants.FrontPictureName);
-            backPicName = settingManager.ReadSettingString(Constants.BackPictureName);
-            scanPath = settingManager.ReadSettingString(Constants.ScanBasePath);
+            frontPicName = settings.FrontPictureName;
+            backPicName = settings.BackPictureName;
+            scanPath = settings.ScanBasePath;
         }
        
     }

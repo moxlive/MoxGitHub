@@ -17,30 +17,28 @@ namespace PhotoOrganizer.BusinessModule
         FolderScanner folderScanner;
         FileWriter fileWriter;
         PhotoModifier photoModifier;
-        ISettingManager settingManager;
 
+        public ISettingManager SettingManager { get; private set;}
+        public Settings Settings { get; private set; }
+        
         public WorkFlowController()
         {
-          
+            Settings = new Settings();
         }
 
         public void Initialize()
         {
-            settingManager = new SettingManager();
+            this.SettingManager = new SettingManager();
+            this.SettingManager.ReadSetting(Settings);
+
             folderScanner = new FolderScanner();
-            folderScanner.InitVisitors(settingManager);
-            photoModifier = new PhotoModifier(settingManager);
-            fileWriter = new FileWriter(settingManager);
+            folderScanner.InitVisitors(Settings);
+            photoModifier = new PhotoModifier(Settings);
+            fileWriter = new FileWriter(Settings);
         }
 
         public void StartScan()
         {
-            SettingManager settingManager = new SettingManager();
-            //settingManager.SaveSetting(Constants.OverviewFolderBasePath, @"D:\Programs\Github\PhotoOrganizer\TestFolder\");
-            //settingManager.SaveSetting(Constants.ScanBasePath, @"D:\Programs\Github\PhotoOrganizer\TestFolder\");
-            //settingManager.SaveSetting(Constants.FrontPictureName, @"089.jpg");
-            //settingManager.SaveSetting(Constants.BackPictureName, @"090.jpg");
-
             IList<PhotoGroup> groups = folderScanner.FindNewPhotoGroups();
 
             foreach (PhotoGroup group in groups)

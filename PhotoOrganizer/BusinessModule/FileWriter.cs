@@ -8,6 +8,7 @@ using PhotoOrganizer.BusinessModule.Photos;
 using PhotoOrganizer.BusinessModule.Common;
 using System.Drawing.Imaging;
 using System.Drawing;
+using PhotoOrganizer.BusinessModule.Common;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -15,12 +16,12 @@ namespace PhotoOrganizer.BusinessModule
     {
 
         string outputDir = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
-        
-        ISettingManager settingManager;
 
-        public FileWriter(ISettingManager settingMgr)
+        Settings setting;
+
+        public FileWriter(Settings settings)
         {
-            settingManager = settingMgr;
+            this.setting = settings;
             LoadSettings();
         }
 
@@ -59,7 +60,7 @@ namespace PhotoOrganizer.BusinessModule
 
         private void LoadSettings()
         {
-            outputDir = settingManager.ReadSettingString(Constants.OverviewFolderBasePath);
+            outputDir = setting.OverviewFolderBasePath;
 
         }
     }

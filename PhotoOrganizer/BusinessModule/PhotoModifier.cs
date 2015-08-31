@@ -7,16 +7,17 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using PhotoOrganizer.BusinessModule.Photos;
+using PhotoOrganizer.BusinessModule.Common;
 
 namespace PhotoOrganizer.BusinessModule
 {
     public class PhotoModifier
     {
-        ISettingManager settingManager;
+        Settings settings;
 
-        public PhotoModifier(ISettingManager settingMgr)
+        public PhotoModifier(Settings settings)
         {
-            settingManager = settingMgr;
+            this.settings = settings;
         }
 
         public Bitmap CombinePicture(PhotoGroup group)

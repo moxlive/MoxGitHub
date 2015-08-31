@@ -5,16 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
-namespace PhotoOrganizer.Common
+namespace PhotoOrganizer.BusinessModule.Common
 {
     public class Settings : INotifyPropertyChanged
     {
+        public const string ScanBasePathStr = "ScanBasePath";
+        public const string OverviewFolderBasePathStr = "OverviewFolderBasePath";
+        public const string FrontPictureNameStr = "FrontPictureName";
+        public const string BackPictureNameStr = "BackPictureName";
+
         private string overviewFolderBasePath;
         private string scanBasePath;
         private string frontPictureName;
         private string backPictureName;
 
         #region properties
+
         public string ScanBasePath
         {
             get

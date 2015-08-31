@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using PhotoOrganizer.BusinessModule.Common;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -39,6 +40,14 @@ namespace PhotoOrganizer.BusinessModule
             }
         }
 
+        public void SaveSetting(Settings setting)
+        {
+            SaveSetting(Settings.ScanBasePathStr, setting.ScanBasePath);
+            SaveSetting(Settings.OverviewFolderBasePathStr, setting.OverviewFolderBasePath);
+            SaveSetting(Settings.FrontPictureNameStr, setting.FrontPictureName);
+            SaveSetting(Settings.BackPictureNameStr, setting.BackPictureName);
+        }
+
         public string ReadSettingString(string settingName)
         {
             try
@@ -59,6 +68,15 @@ namespace PhotoOrganizer.BusinessModule
             }
 
              return "";            
+        }
+
+        public void ReadSetting(Settings setting)
+        {
+            setting.ScanBasePath = ReadSettingString(Settings.ScanBasePathStr);
+            setting.OverviewFolderBasePath = ReadSettingString(Settings.OverviewFolderBasePathStr);
+            setting.FrontPictureName = ReadSettingString(Settings.FrontPictureNameStr);
+            setting.BackPictureName = ReadSettingString(Settings.BackPictureNameStr);
+
         }
 
         private static void CreateNewElement(string settingName, string value, XmlDocument doc, XmlNode parent)
