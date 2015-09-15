@@ -1,0 +1,51 @@
+﻿<Window x:Class="PhotoOrganizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Photo Organizer" Height="400" Width="525" Loaded="Window_Loaded">
+    <Window.Resources>
+
+    </Window.Resources>
+    <Grid>
+        <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="508">
+            <MenuItem Header="_File" />
+            <MenuItem Header="_Edit" />
+            <MenuItem Header="_View" />
+            <MenuItem Header="_Help" />
+        </Menu>
+
+        <TabControl HorizontalAlignment="Left" Height="300" Margin="0,23,0,0" VerticalAlignment="Top" Width="518" Background="#FFF0F0F0">
+            <TabItem Header="General" Margin="0,0,-0.2,0">
+                <StackPanel>
+                    <GroupBox Header="Settings" Margin="0,0,-0.2,109.6" Height="270">
+                        <Grid Margin="0,10,0,-12.8">
+                            <Label Content="Scan Path:" Margin="20,12,391,209"/>
+                            <TextBox x:Name="ScanPathTextBox" Text="{Binding Path=Setting.ScanBasePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,193.8,111.6" VerticalAlignment="Top"/>
+                            <Label Content="Output Path:" Margin="20,39,391,183"/>
+                            <TextBox x:Name="OutputPathTextBox" Text="{Binding Path=Setting.OverviewFolderBasePath, UpdateSourceTrigger=LostFocus}" Margin="114,45,193,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Picture">
+                <StackPanel>
+                    <GroupBox Header="Picture Settings" Margin="0,0,-0.2,100" Height="285">
+                        <Grid Margin="0,10,0,-22.8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="41*"/>
+                                <RowDefinition Height="5*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Front Picture:" Margin="20,12,391,179.6"/>
+                            <TextBox x:Name="FrontPictureNameTextBox" Text="{Binding Setting.FrontPictureName, UpdateSourceTrigger=LostFocus}" Margin="114,15,193,0" VerticalAlignment="Top"/>
+                            <Label Content="Back Picture:" Margin="20,39,391,153.6"/>
+                            <TextBox x:Name="BackPictureNameTextBox" Text="{Binding Setting.BackPictureName, UpdateSourceTrigger=LostFocus}" Margin="114,45,193,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <StackPanel Margin="0,320,0,0">
+            <Button x:Name="ButtonApply"  Content="Apply" Command="{Binding Path=ApplyCommand}" Background="#FFF0F0F0" Margin="390,15,68,0" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+        </StackPanel>
+
+    </Grid>
+</Window>

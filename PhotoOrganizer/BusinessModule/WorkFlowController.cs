@@ -32,7 +32,7 @@ namespace PhotoOrganizer.BusinessModule
             this.SettingManager.ReadSetting(Settings);
 
             folderScanner = new FolderScanner();
-            folderScanner.InitVisitors(Settings);
+            //folderScanner.InitVisitors(Settings);
             photoModifier = new PhotoModifier(Settings);
             fileWriter = new FileWriter(Settings);
         }

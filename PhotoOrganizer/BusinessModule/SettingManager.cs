@@ -32,7 +32,7 @@ namespace PhotoOrganizer.BusinessModule
                 }
 
                 root = doc.DocumentElement;
-                CreateNewElement(settingName, value, doc, root);
+                CreateOrUpdateElement(settingName, value, doc, root);
                 doc.Save(settingFilePath);
             }
             catch (Exception ex)
@@ -79,12 +79,22 @@ namespace PhotoOrganizer.BusinessModule
 
         }
 
-        private static void CreateNewElement(string settingName, string value, XmlDocument doc, XmlNode parent)
+        private static void CreateOrUpdateElement(string settingName, string value, XmlDocument doc, XmlNode parent)
         {
-            XmlElement element = doc.CreateElement(settingNodeName);
-            element.SetAttribute(settingNodeAttName, settingName);
-            element.InnerText = value;
-            parent.AppendChild(element);
+
+            var existingElement = parent.SelectSingleNode(string.Format("/Settings/SettingNode[@SettingName=\"{0}\"]", settingName));
+
+            if (existingElement != null)
+            {
+                existingElement.InnerText = value;
+            }
+            else
+            {
+                XmlElement element = doc.CreateElement(settingNodeName);
+                element.SetAttribute(settingNodeAttName, settingName);
+                element.InnerText = value;
+                parent.AppendChild(element);
+            }
         }
        
     }
