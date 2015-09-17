@@ -31,26 +31,18 @@ namespace PhotoOrganizer.BusinessModule
             this.SettingManager = new SettingManager();
             this.SettingManager.ReadSetting(Settings);
 
-            folderScanner = new FolderScanner();
-            //folderScanner.InitVisitors(Settings);
             photoModifier = new PhotoModifier(Settings);
             fileWriter = new FileWriter(Settings);
-        }
 
-        public void StartScan()
-        {
-            IList<PhotoGroup> groups = folderScanner.FindNewPhotoGroups();
-
-            foreach (PhotoGroup group in groups)
+            folderScanner = new FolderScanner();
+            folderScanner.InitVisitors(Settings);
+            folderScanner.NewPhotoGoupHandler = (photoGroup) =>
             {
-                Bitmap newPic = photoModifier.CombinePicture(group);
-
-                fileWriter.SavePic(group, newPic);
-            }
-
+                Bitmap newPic = photoModifier.CombinePicture(photoGroup);
+                fileWriter.SavePic(photoGroup, newPic);
+            };
         }
-
-     
+        
     }
 
     

@@ -25,17 +25,7 @@ namespace PhotoOrganizer.BusinessModule.Visitors
             IList<VisitorItem> validFolders = new List<VisitorItem>();
             foreach (DirectoryInfo d in currentItem.CurrentDir.GetDirectories())
             {
-                bool folderIsValid = true;
-                foreach (IFolderMatchRule r in MatchRules)
-                {
-                    if (!r.CheckMatch(d.Name))
-                    {
-                        //log
-                        break;
-                    }
-                }
-
-                if (folderIsValid)
+                if (ValidateFolderName(d.Name))
                 {
                     //log
                     VisitorItem newItem = new VisitorItem
@@ -51,6 +41,20 @@ namespace PhotoOrganizer.BusinessModule.Visitors
             }
 
             return validFolders;
+        }
+
+        public bool ValidateFolderName(string input)
+        {
+            foreach (IFolderMatchRule r in MatchRules)
+            {
+                if (!r.CheckMatch(input))
+                {
+                    //log
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

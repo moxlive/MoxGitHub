@@ -81,10 +81,9 @@ namespace PhotoOrganizer.BusinessModule
 
         private static void CreateOrUpdateElement(string settingName, string value, XmlDocument doc, XmlNode parent)
         {
+            var existingElement = parent.SelectSingleNode(string.Format(attSearchPath, settingName));
 
-            var existingElement = parent.SelectSingleNode(string.Format("/Settings/SettingNode[@SettingName=\"{0}\"]", settingName));
-
-            if (existingElement != null)
+            if (existingElement != null && existingElement.InnerText != value)
             {
                 existingElement.InnerText = value;
             }

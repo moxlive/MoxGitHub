@@ -16,19 +16,20 @@ namespace PhotoOrganizer.BusinessModule
     /// rule scanPath/Raw Scans/date/CustomSeqNum/ScanSeqNum/0xx.jpg
     /// </summary>
     public class FolderScanner
-    {
-        
-        private List<FolderVisitor> visitors;
-        Settings settings;
+    {        
 
         private const string visitorKey_RawScan = "RawScan";
         private const string visitorKey_ScanDate = "ScanDate";
         private const string visitorKey_CustomSeqNum = "CustomSeqNum";
         private const string visitorKey_ScanSeqNum = "ScanSeqNum";
 
+        private List<FolderVisitor> visitors;
+        private Settings settings;
         private string frontPicName = "089.jpg";
         private string backPicName = "090.jpg";
-        private string scanPath = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
+        private string scanPath = @"D:\";
+
+        public Action<PhotoGroup> NewPhotoGoupHandler;
 
         public void InitVisitors(Settings settings)
         {
@@ -69,9 +70,26 @@ namespace PhotoOrganizer.BusinessModule
             rules.Add(rule4);
             visitors.Add(new FolderVisitor(rules, visitorKey_ScanSeqNum));
 
+            WatchChange();
+
         }
 
-        public IList<PhotoGroup> FindNewPhotoGroups()
+        public void StartFullScan()
+        {
+            IList<PhotoGroup> groups = FindNewPhotoGroups();
+
+            foreach (PhotoGroup group in groups)
+            {
+                if (NewPhotoGoupHandler != null)
+                {
+                    NewPhotoGoupHandler.Invoke(group);
+                }
+            }
+
+        }
+
+        #region private helper
+        private IList<PhotoGroup> FindNewPhotoGroups()
         {
             IList<PhotoGroup> photoGroups = new List<PhotoGroup>();
 
@@ -152,8 +170,59 @@ namespace PhotoOrganizer.BusinessModule
             backPicName = settings.BackPictureName;
             scanPath = settings.ScanBasePath;
         }
-       
-    }
 
+        private void WatchChange()
+        {
+            var changeWatcher = new System.IO.FileSystemWatcher();
+            changeWatcher.Path = scanPath;
+            changeWatcher.IncludeSubdirectories = true;
+            changeWatcher.Filter = "*.jpg";
+            changeWatcher.Created += ChangeHandler;
+            changeWatcher.EnableRaisingEvents = true;
+        }
+
+        private void ChangeHandler(object sender, FileSystemEventArgs e)
+        {
+            string relativePath = e.Name; //RAW Scans\20150705\C0001\006\090.jpg
+            string fileName = Path.GetFileName(relativePath);
+            string directoryPath = Path.GetDirectoryName(e.FullPath); //D:\Programs\Github\PhotoOrganizer\TestFolder\RAW Scans\20150705\C0001\006
+
+            //check if both front and back picture exist
+            if (!((fileName == frontPicName && File.Exists(directoryPath + "\\" + backPicName))
+                || (fileName == backPicName && File.Exists(directoryPath + "\\" + frontPicName))))
+            {
+                return;
+            }
+
+            //if folder hierarchy level
+            string[] folderNames = Path.GetDirectoryName(relativePath).Split(new char[] { '\\', '/' });
+            if (folderNames.Length != visitors.Count)
+            {
+                return;
+            }
+
+            //check folder name against rules
+            VisitorItem item = new VisitorItem();
+            item.CurrentDir = new DirectoryInfo(directoryPath);
+            for(int i = 0; i < visitors.Count; i++)
+            {
+                if (!visitors[i].ValidateFolderName(folderNames[i]))
+                {
+                    return;
+                }
+
+                item.Info.Add(visitors[i].VisitorKey, folderNames[i]);
+            }
+
+            PhotoGroup group = CreatePhotoGroup(item);
+
+            if (NewPhotoGoupHandler != null)
+            {
+                NewPhotoGoupHandler.Invoke(group);
+            }
+        }
+
+        #endregion
+    }
   
 }
