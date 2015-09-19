@@ -20,6 +20,7 @@ namespace PhotoOrganizer.BusinessModule
 
         public ISettingManager SettingManager { get; private set;}
         public Settings Settings { get; private set; }
+        public ManualPictureCombiner ManualPictureCombiner { get; private set; }
         
         public WorkFlowController()
         {
@@ -41,6 +42,8 @@ namespace PhotoOrganizer.BusinessModule
                 Bitmap newPic = photoModifier.CombinePicture(photoGroup);
                 fileWriter.SavePic(photoGroup, newPic);
             };
+
+            ManualPictureCombiner = new ManualPictureCombiner(photoModifier, fileWriter);
         }
         
     }

@@ -17,11 +17,18 @@ namespace PhotoOrganizer.ViewModel
     {
         private WorkFlowController workflowController;
         private Settings setting;
+        private ManualPictureCombiner manualPictureCombiner;
 
         public Settings Setting
         {
             get { return setting; }
             private set { setting = value; }
+        }
+
+        public ManualPictureCombiner ManualPictureCombiner
+        {
+            get { return manualPictureCombiner; }
+            private set { manualPictureCombiner = value; }
         }
 
         internal MainViewModel(MainWindow control)
@@ -31,7 +38,8 @@ namespace PhotoOrganizer.ViewModel
             workflowController = new WorkFlowController();
             workflowController.Initialize();
             setting = workflowController.Settings;
-          
+
+            manualPictureCombiner = workflowController.ManualPictureCombiner;
             ApplyCommand = new RelayCommand(ApplyCommand_Executed);
         }
 
@@ -42,12 +50,12 @@ namespace PhotoOrganizer.ViewModel
             get;
             private set;
         }
-
+      
         private void ApplyCommand_Executed()
         {
             workflowController.SettingManager.SaveSetting(this.Setting);
         }
-
+             
         #endregion commands
 
         #region helpers
@@ -62,4 +70,5 @@ namespace PhotoOrganizer.ViewModel
 
         #endregion helpers
     }
+
 }

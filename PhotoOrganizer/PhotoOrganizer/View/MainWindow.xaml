@@ -29,15 +29,30 @@
             <TabItem Header="Picture">
                 <StackPanel>
                     <GroupBox Header="Picture Settings" Margin="0,0,-0.2,100" Height="285">
-                        <Grid Margin="0,10,0,-22.8">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="41*"/>
-                                <RowDefinition Height="5*"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Front Picture:" Margin="20,12,391,179.6"/>
-                            <TextBox x:Name="FrontPictureNameTextBox" Text="{Binding Setting.FrontPictureName, UpdateSourceTrigger=LostFocus}" Margin="114,15,193,0" VerticalAlignment="Top"/>
-                            <Label Content="Back Picture:" Margin="20,39,391,153.6"/>
-                            <TextBox x:Name="BackPictureNameTextBox" Text="{Binding Setting.BackPictureName, UpdateSourceTrigger=LostFocus}" Margin="114,45,193,0" VerticalAlignment="Top"/>
+                        <Grid Margin="0,10,0,-22.8">                           
+                            <Label Content="Front Picture Name:" Margin="20,12,360,240"/>
+                            <TextBox x:Name="FrontPictureNameTextBox" Text="{Binding Setting.FrontPictureName, UpdateSourceTrigger=LostFocus}" Margin="140,15,193,0" VerticalAlignment="Top"/>
+                            <Label Content="Back Picture Name:" Margin="20,39,360,210"/>
+                            <TextBox x:Name="BackPictureNameTextBox" Text="{Binding Setting.BackPictureName, UpdateSourceTrigger=LostFocus}" Margin="140,45,193,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Manual">
+                <StackPanel>
+                    <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="285">
+                        <Grid Margin="0,10,0,-22.8">                        
+                            <Label Content="Front Picture:" Margin="20,12,391,240"/>
+                            <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenFrontPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,193,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseFrontPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseFrontPicCommand}" Background="#FFF0F0F0" Margin="339,14,107,241.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Label Content="Back Picture:" Margin="20,39,391,210"/>
+                            <TextBox x:Name="BackPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenBackPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,45,193,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseBackPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseBackPicCommand}" Background="#FFF0F0F0" Margin="339,43,107,212.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Label Content="Output Picture:" Margin="20,69,386,180.2"/>
+                            <TextBox x:Name="OutputPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenOutputPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,73,193,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseOutputPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseOutputPicCommand}" Background="#FFF0F0F0" Margin="339,71,107,184.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding Path=ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="424,15,22,184.2" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+
                         </Grid>
                     </GroupBox>
                 </StackPanel>

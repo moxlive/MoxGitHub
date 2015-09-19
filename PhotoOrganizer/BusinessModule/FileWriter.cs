@@ -8,7 +8,6 @@ using PhotoOrganizer.BusinessModule.Photos;
 using PhotoOrganizer.BusinessModule.Common;
 using System.Drawing.Imaging;
 using System.Drawing;
-using PhotoOrganizer.BusinessModule.Common;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -25,17 +24,12 @@ namespace PhotoOrganizer.BusinessModule
             LoadSettings();
         }
 
-        public bool SavePic(PhotoGroup group, Bitmap newPic)
+        public bool SavePic(string outputPath, Bitmap newPic)
         {
             try
             {
-                if (newPic == null)
-                {
-                    return false;
-                }
-                string outputFolder = ForceFolderStracture(group);
-                //todo : allow user to set it 
-                newPic.Save(outputFolder + group.ScanSeqNum + ".jpg", ImageFormat.Jpeg);
+                ForceFolderStracture(Path.GetDirectoryName(outputPath));
+                newPic.Save(outputPath, ImageFormat.Jpeg);
             }
             catch
             {
@@ -48,14 +42,42 @@ namespace PhotoOrganizer.BusinessModule
             return true;
         }
 
-        private string ForceFolderStracture(PhotoGroup group)
+        public bool SavePic(PhotoGroup group, Bitmap newPic)
         {
-            string outputFolder = string.Format("{0}\\{1}\\{2}\\{3}\\", outputDir, "Scan Overview", group.Date.ToString("yyyyMMdd"), group.CustomSeqNum);
-            if (!Directory.Exists(outputFolder))
+            try
             {
-                Directory.CreateDirectory(outputFolder);
+                if (newPic == null)
+                {
+                    return false;
+                }
+                string outputPath = BuildPath(group);
+                //todo : allow user to set it 
+                SavePic(outputPath, newPic);
             }
-            return outputFolder;
+            catch
+            {
+            }
+            finally
+            {
+                newPic.Dispose();
+            }
+
+            return true;
+        }
+
+        private void ForceFolderStracture(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+        }
+
+        private string BuildPath(PhotoGroup group)
+        {
+            string outputPath = string.Format("{0}\\{1}\\{2}\\{3}\\", outputDir, "Scan Overview", group.Date.ToString("yyyyMMdd"), group.CustomSeqNum);
+            outputPath += group.ScanSeqNum + ".jpg";
+            return outputPath;
         }
 
         private void LoadSettings()

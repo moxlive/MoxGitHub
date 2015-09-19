@@ -25,12 +25,17 @@ namespace PhotoOrganizer.BusinessModule
             Photo front = group.Front;
             Photo back = group.Back;
 
+            return CombinePicture(front.FullPath, back.FullPath);
+        }
+
+        public Bitmap CombinePicture(string frontPicPath, string backPicPath)
+        {
             //todo check this out, configurable
-            Image fi = Image.FromFile(front.FullPath);
+            Image fi = Image.FromFile(frontPicPath);
             fi.RotateFlip(RotateFlipType.Rotate90FlipNone);
 
             //todo check this out, configurable
-            Image bi = Image.FromFile(back.FullPath);
+            Image bi = Image.FromFile(backPicPath);
             bi.RotateFlip(RotateFlipType.Rotate270FlipNone);
 
             Bitmap newPic = new Bitmap(fi.Width + bi.Width, Math.Max(fi.Height, bi.Height));
@@ -38,8 +43,8 @@ namespace PhotoOrganizer.BusinessModule
             {
                 //todo, configurable
                 g.InterpolationMode = InterpolationMode.Default;
-                g.CompositingQuality = CompositingQuality.HighSpeed; 
-                g.DrawImage(fi, 0, 0,fi.Width, fi.Height);
+                g.CompositingQuality = CompositingQuality.HighSpeed;
+                g.DrawImage(fi, 0, 0, fi.Width, fi.Height);
                 g.DrawImage(bi, fi.Width, 0, bi.Width, bi.Height);
             }
 
