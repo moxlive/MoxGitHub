@@ -74,7 +74,7 @@ namespace PhotoOrganizer.BusinessModule
 
         }
 
-        public void StartFullScan()
+        public void FullScan()
         {
             IList<PhotoGroup> groups = FindNewPhotoGroups();
 

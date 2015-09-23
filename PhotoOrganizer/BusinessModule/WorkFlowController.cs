@@ -8,20 +8,18 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using PhotoOrganizer.BusinessModule.Common;
 
-
-
 namespace PhotoOrganizer.BusinessModule
 {
     public class WorkFlowController
     {
-        FolderScanner folderScanner;
         FileWriter fileWriter;
         PhotoModifier photoModifier;
 
         public ISettingManager SettingManager { get; private set;}
         public Settings Settings { get; private set; }
         public ManualPictureCombiner ManualPictureCombiner { get; private set; }
-        
+        public FolderScanner FolderScanner { get; private set; }
+
         public WorkFlowController()
         {
             Settings = new Settings();
@@ -35,9 +33,9 @@ namespace PhotoOrganizer.BusinessModule
             photoModifier = new PhotoModifier(Settings);
             fileWriter = new FileWriter(Settings);
 
-            folderScanner = new FolderScanner();
-            folderScanner.InitVisitors(Settings);
-            folderScanner.NewPhotoGoupHandler = (photoGroup) =>
+            FolderScanner = new FolderScanner();
+            FolderScanner.InitVisitors(Settings);
+            FolderScanner.NewPhotoGoupHandler = (photoGroup) =>
             {
                 Bitmap newPic = photoModifier.CombinePicture(photoGroup);
                 fileWriter.SavePic(photoGroup, newPic);

@@ -38,9 +38,11 @@ namespace PhotoOrganizer.ViewModel
             workflowController = new WorkFlowController();
             workflowController.Initialize();
             setting = workflowController.Settings;
-
             manualPictureCombiner = workflowController.ManualPictureCombiner;
+
             ApplyCommand = new RelayCommand(ApplyCommand_Executed);
+            FullScanCommand = new RelayCommand(FullScanCommand_Executed);
+
         }
 
         #region commands
@@ -50,10 +52,21 @@ namespace PhotoOrganizer.ViewModel
             get;
             private set;
         }
+
+        public ICommand FullScanCommand
+        {
+            get;
+            private set;
+        }
       
         private void ApplyCommand_Executed()
         {
             workflowController.SettingManager.SaveSetting(this.Setting);
+        }
+
+        private void FullScanCommand_Executed()
+        {
+            workflowController.FolderScanner.FullScan();
         }
              
         #endregion commands

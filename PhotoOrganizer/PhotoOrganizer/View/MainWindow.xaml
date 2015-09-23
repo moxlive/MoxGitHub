@@ -22,6 +22,7 @@
                             <TextBox x:Name="ScanPathTextBox" Text="{Binding Path=Setting.ScanBasePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,193.8,111.6" VerticalAlignment="Top"/>
                             <Label Content="Output Path:" Margin="20,39,391,183"/>
                             <TextBox x:Name="OutputPathTextBox" Text="{Binding Path=Setting.OverviewFolderBasePath, UpdateSourceTrigger=LostFocus}" Margin="114,45,193,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonScan"  Content="Scan" Command="{Binding Path=FullScanCommand}" Background="#FFF0F0F0" Margin="378,14,56,215" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
