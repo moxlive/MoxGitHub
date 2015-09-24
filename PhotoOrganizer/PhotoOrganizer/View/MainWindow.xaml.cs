@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using PhotoOrganizer.BusinessModule;
 using PhotoOrganizer.BusinessModule.Common;
 using PhotoOrganizer.ViewModel;
+using System.Windows.Forms;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace PhotoOrganizer
 {
@@ -25,17 +27,39 @@ namespace PhotoOrganizer
     {
     
         MainViewModel vm;
+        TaskbarIcon taskbarIcon;
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();          
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             vm = new MainViewModel(this);
+            taskbarIcon = (TaskbarIcon)FindResource("NotifyIcon");
+            taskbarIcon.TrayMouseDoubleClick += NotifyIcon_MouseDoubleClick;
+
         }
-      
+
+        private void NotifyIcon_MouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+     
+            this.WindowState = System.Windows.WindowState.Normal;
+            this.ShowInTaskbar = true;
+            taskbarIcon.Visibility = System.Windows.Visibility.Hidden;
+            this.Show();
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == System.Windows.WindowState.Minimized)
+            {
+                taskbarIcon.Visibility = System.Windows.Visibility.Visible;
+                taskbarIcon.ShowBalloonTip("3DBean", "I'm here", BalloonIcon.Info);
+                this.ShowInTaskbar = false;
+            }
+        }
         /// <summary>
         /// only for testing
         /// </summary>
