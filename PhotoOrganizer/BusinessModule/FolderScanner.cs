@@ -9,6 +9,7 @@ using PhotoOrganizer.BusinessModule.Photos;
 using PhotoOrganizer.BusinessModule.MatchRules;
 using PhotoOrganizer.BusinessModule.Visitors;
 using PhotoOrganizer.BusinessModule.Common;
+using PhotoOrganizer.BusinessModule.Log;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -28,6 +29,12 @@ namespace PhotoOrganizer.BusinessModule
         private string frontPicName = "089.jpg";
         private string backPicName = "090.jpg";
         private string scanPath = @"D:\";
+        private ILogger log;
+
+        public FolderScanner()
+        {
+            log = FileLogger.CreateLogger("FolderScanner");
+        }
 
         public Action<PhotoGroup> NewPhotoGoupHandler;
 
@@ -76,6 +83,7 @@ namespace PhotoOrganizer.BusinessModule
 
         public void FullScan()
         {
+            log.LogInfo(string.Format("Start Full Scan, base folder {0}", settings.ScanBasePath));
             IList<PhotoGroup> groups = FindNewPhotoGroups();
 
             foreach (PhotoGroup group in groups)
@@ -140,6 +148,7 @@ namespace PhotoOrganizer.BusinessModule
 
             if (!File.Exists(dir.FullName + "\\" + frontPicName) || !File.Exists(dir.FullName + "\\" + frontPicName))
             {
+                log.LogInfo(string.Format("Did not find {0} or {1} in folder {2}.", frontPicName, backPicName, dir.FullName));
                 return null;
                 //log
             }
@@ -160,7 +169,9 @@ namespace PhotoOrganizer.BusinessModule
                     FullPath = item.CurrentDir.FullName + "\\" + backPicName
                 }
             };
-
+            
+            log.LogInfo(string.Format("Created photo group with {0} and {1} in folder {2}. Date={3}, CustomSeqNum={4}, ScanSeqNum={5}", 
+                frontPicName, backPicName, dir.FullName, pg.Date, pg.CustomSeqNum, pg.ScanSeqNum));  
             return pg;
         }
 
@@ -179,6 +190,7 @@ namespace PhotoOrganizer.BusinessModule
             changeWatcher.Filter = "*.jpg";
             changeWatcher.Created += ChangeHandler;
             changeWatcher.EnableRaisingEvents = true;
+            log.LogInfo(string.Format("Start watching change in folder {0}", scanPath));
         }
 
         private void ChangeHandler(object sender, FileSystemEventArgs e)
@@ -194,6 +206,7 @@ namespace PhotoOrganizer.BusinessModule
                 return;
             }
 
+            log.LogInfo(string.Format("Locate new picture {0} and {1} in {2}", backPicName, frontPicName, directoryPath));
             //if folder hierarchy level
             string[] folderNames = Path.GetDirectoryName(relativePath).Split(new char[] { '\\', '/' });
             if (folderNames.Length != visitors.Count)
@@ -208,6 +221,7 @@ namespace PhotoOrganizer.BusinessModule
             {
                 if (!visitors[i].ValidateFolderName(folderNames[i]))
                 {
+                    log.LogInfo(string.Format("Picture path {0} did not match rules, skipped", directoryPath));   
                     return;
                 }
 

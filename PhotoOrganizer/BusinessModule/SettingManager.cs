@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using PhotoOrganizer.BusinessModule.Common;
+using PhotoOrganizer.BusinessModule.Log;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -15,6 +16,12 @@ namespace PhotoOrganizer.BusinessModule
         private const string attSearchPath = @"//SettingNode[@SettingName='{0}']";
         private const string settingNodeName = @"SettingNode";
         private const string settingNodeAttName = @"SettingName";
+
+        ILogger log;
+        public SettingManager()
+        {
+            log = FileLogger.CreateLogger("SettingManager");
+        }
 
         public void SaveSetting(string settingName, string value)
         {
@@ -36,7 +43,8 @@ namespace PhotoOrganizer.BusinessModule
                 doc.Save(settingFilePath);
             }
             catch (Exception ex)
-            { 
+            {
+                log.LogException(string.Format("Save Setting {0}={1} error.", settingName, value), ex);
             }
         }
 
@@ -62,11 +70,12 @@ namespace PhotoOrganizer.BusinessModule
                 nsmgr.AddNamespace("", "");
                 string xPathString = string.Format(attSearchPath, settingName);
                 XmlNode selected = root.SelectSingleNode(xPathString, nsmgr);
+                log.LogInfo(string.Format("Read Setting {0}={1}.", settingName, selected.InnerText));   
                 return selected.InnerText;
             }
-            catch
+            catch(Exception ex)
             {
-               
+                log.LogException(string.Format("Read Setting {0} error.", settingName), ex);     
             }
 
              return "";            
