@@ -17,6 +17,7 @@ using PhotoOrganizer.BusinessModule.Common;
 using PhotoOrganizer.ViewModel;
 using System.Windows.Forms;
 using Hardcodet.Wpf.TaskbarNotification;
+using log4net;
 
 namespace PhotoOrganizer
 {
@@ -39,7 +40,6 @@ namespace PhotoOrganizer
             vm = new MainViewModel(this);
             taskbarIcon = (TaskbarIcon)FindResource("NotifyIcon");
             taskbarIcon.TrayMouseDoubleClick += NotifyIcon_MouseDoubleClick;
-
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, RoutedEventArgs e)

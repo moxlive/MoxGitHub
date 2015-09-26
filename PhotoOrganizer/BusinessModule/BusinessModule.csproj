@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.TeamFoundation.Controls, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -49,6 +52,8 @@
     <Compile Include="FileWriter.cs" />
     <Compile Include="FolderScanner.cs" />
     <Compile Include="ISettingManager.cs" />
+    <Compile Include="Log\ILogger.cs" />
+    <Compile Include="Log\FileLogger.cs" />
     <Compile Include="ManualPictureCombiner.cs" />
     <Compile Include="MatchRules\Rules.cs" />
     <Compile Include="PhotoModifier.cs" />
@@ -61,6 +66,10 @@
     <Compile Include="Visitors\VisitorItem.cs" />
     <Compile Include="WorkFlowController.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

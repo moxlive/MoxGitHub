@@ -13,56 +13,46 @@
             </tb:TaskbarIcon.TrayToolTip>
         </tb:TaskbarIcon>
     </Window.Resources>
-    <Grid>
-
-        <Menu IsMainMenu="True" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="508">
-            <MenuItem Header="_File" />
-            <MenuItem Header="_Edit" />
-            <MenuItem Header="_View" />
-            <MenuItem Header="_Help" />
-        </Menu>
-
-        <TabControl HorizontalAlignment="Left" Height="300" Margin="0,23,0,0" VerticalAlignment="Top" Width="518" Background="#FFF0F0F0">
+    <Grid Background="#FFF0F0F0">
+        <TabControl HorizontalAlignment="Left" Height="323" VerticalAlignment="Top" Width="518" Background="#FFF0F0F0">
             <TabItem Header="General" Margin="0,0,-0.2,0">
-                <StackPanel>
-                    <GroupBox Header="Settings" Margin="0,0,-0.2,109.6" Height="270">
-                        <Grid Margin="0,10,0,-12.8">
-                            <Label Content="Scan Path:" Margin="20,12,391,209"/>
-                            <TextBox x:Name="ScanPathTextBox" Text="{Binding Path=Setting.ScanBasePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,113,0" VerticalAlignment="Top"/>
-                            <Label Content="Output Path:" Margin="20,39,391,183"/>
-                            <TextBox x:Name="OutputPathTextBox" Text="{Binding Path=Setting.OverviewFolderBasePath, UpdateSourceTrigger=LostFocus}" Margin="114,45,113,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonScan"  Content="Scan" Command="{Binding Path=FullScanCommand}" Background="#FFF0F0F0" Margin="402,13,32,187" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                        </Grid>
-                    </GroupBox>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Picture">
-                <StackPanel>
-                    <GroupBox Header="Picture Settings" Margin="0,0,-0.2,100" Height="285">
-                        <Grid Margin="0,10,0,-22.8">
-                            <Label Content="Front Picture Name:" Margin="20,12,360,240"/>
-                            <TextBox x:Name="FrontPictureNameTextBox" Text="{Binding Setting.FrontPictureName, UpdateSourceTrigger=LostFocus}" Margin="140,15,193,0" VerticalAlignment="Top"/>
-                            <Label Content="Back Picture Name:" Margin="20,44,360,205.2"/>
-                            <TextBox x:Name="BackPictureNameTextBox" Text="{Binding Setting.BackPictureName, UpdateSourceTrigger=LostFocus}" Margin="140,50,193,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="FrontPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.FrontPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="343,13,0,0" VerticalAlignment="Top" Width="96" Height="20" RenderTransformOrigin="0.519,0.46">
-                                <ComboBoxItem Content="0"/>
-                                <ComboBoxItem Content="90"/>
-                                <ComboBoxItem Content="180"/>
-                                <ComboBoxItem Content="270"/>
-                            </ComboBox>
-                            <ComboBox x:Name="BackPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.BackPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="343,48,0,0" VerticalAlignment="Top" Width="96" Height="20">
-                                <ComboBoxItem Content="0"/>
-                                <ComboBoxItem Content="90"/>
-                                <ComboBoxItem Content="180"/>
-                                <ComboBoxItem Content="270"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
+                <StackPanel Margin="0,0,0,0">
+                    <Grid Height="300" Margin="0,0,0,0">
+                        <GroupBox Header="Settings" Margin="10,0,9.8,181">
+                            <Grid Margin="0,10,0,7.6">
+                                <Label Content="Scan Path:" Margin="20,12,371,40.2"/>
+                                <TextBox x:Name="ScanPathTextBox" Text="{Binding Path=Setting.ScanBasePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,94,0" VerticalAlignment="Top"/>
+                                <Label Content="Output Path:" Margin="20,39,371,10.2"/>
+                                <TextBox x:Name="OutputPathTextBox" Text="{Binding Path=Setting.OverviewFolderBasePath, UpdateSourceTrigger=LostFocus}" Margin="114,45,94,0" VerticalAlignment="Top"/>
+                                <Button x:Name="ButtonScan"  Content="Scan" Command="{Binding Path=FullScanCommand}" Background="#FFF0F0F0" Margin="416,10,18,12.2" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Picture" Margin="10,124,9.8,10">
+                            <Grid Margin="0,0,0,0">
+                                <Label Content="Front Picture Name:" Margin="20,10,340,104"/>
+                                <TextBox x:Name="FrontPictureNameTextBox" Text="{Binding Setting.FrontPictureName, UpdateSourceTrigger=LostFocus}" Margin="155,16,178,0" VerticalAlignment="Top"/>
+                                <Label Content="Back Picture Name:" Margin="20,45,337,72"/>
+                                <TextBox x:Name="BackPictureNameTextBox" Text="{Binding Setting.BackPictureName, UpdateSourceTrigger=LostFocus}" Margin="155,51,178,0" VerticalAlignment="Top"/>
+                                <ComboBox x:Name="FrontPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.FrontPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="363,14,0,0" VerticalAlignment="Top" Width="96" Height="20">
+                                    <ComboBoxItem Content="0"/>
+                                    <ComboBoxItem Content="90"/>
+                                    <ComboBoxItem Content="180"/>
+                                    <ComboBoxItem Content="270"/>
+                                </ComboBox>
+                                <ComboBox x:Name="BackPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.BackPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="363,49,0,0" VerticalAlignment="Top" Width="96" Height="20">
+                                    <ComboBoxItem Content="0"/>
+                                    <ComboBoxItem Content="90"/>
+                                    <ComboBoxItem Content="180"/>
+                                    <ComboBoxItem Content="270"/>
+                                </ComboBox>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Manual">
                 <StackPanel>
-                    <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="285">
+                    <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="291">
                         <Grid Margin="0,10,0,-22.8">
                             <Label Content="Front Picture:" Margin="20,12,391,240"/>
                             <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenFrontPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,166,0" VerticalAlignment="Top"/>
@@ -80,7 +70,7 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <StackPanel Margin="0,320,0,0">
+        <StackPanel Margin="0,320,0,0" Background="#FFF0F0F0">
             <Button x:Name="ButtonApply"  Content="Apply" Command="{Binding Path=ApplyCommand}" Background="#FFF0F0F0" Margin="390,15,68,0" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
         </StackPanel>
     </Grid>

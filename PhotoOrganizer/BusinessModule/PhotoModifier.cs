@@ -30,13 +30,11 @@ namespace PhotoOrganizer.BusinessModule
 
         public Bitmap CombinePicture(string frontPicPath, string backPicPath)
         {
-            //todo check this out, configurable
             Image fi = Image.FromFile(frontPicPath);
-            fi.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            fi.RotateFlip(GetRotateType(settings.FrontPictureRotate));
 
-            //todo check this out, configurable
             Image bi = Image.FromFile(backPicPath);
-            bi.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            bi.RotateFlip(GetRotateType(settings.BackPictureRotate));
 
             Bitmap newPic = new Bitmap(fi.Width + bi.Width, Math.Max(fi.Height, bi.Height));
             using (Graphics g = Graphics.FromImage(newPic))
@@ -50,6 +48,21 @@ namespace PhotoOrganizer.BusinessModule
 
             return newPic;
 
+        }
+
+        private static RotateFlipType GetRotateType(string degree)
+        {
+            switch (degree)
+            {
+                case "90":
+                    return RotateFlipType.Rotate90FlipNone;
+                case "180":
+                    return RotateFlipType.Rotate180FlipNone;
+                case "270":
+                    return RotateFlipType.Rotate270FlipNone;
+                default: 
+                    return RotateFlipType.RotateNoneFlipNone;
+            }
         }
     }
 }
