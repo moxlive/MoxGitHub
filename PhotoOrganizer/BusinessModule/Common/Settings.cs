@@ -13,11 +13,16 @@ namespace PhotoOrganizer.BusinessModule.Common
         public const string OverviewFolderBasePathStr = "OverviewFolderBasePath";
         public const string FrontPictureNameStr = "FrontPictureName";
         public const string BackPictureNameStr = "BackPictureName";
+        public const string FrontPictureRotateStr = "FrontPictureRotate";
+        public const string BackPictureRotateStr = "BackPictureRotate";
+
 
         private string overviewFolderBasePath;
         private string scanBasePath;
         private string frontPictureName;
         private string backPictureName;
+        private string frontPictureRotate;
+        private string backPictureRotate;
 
         #region properties
 
@@ -85,6 +90,40 @@ namespace PhotoOrganizer.BusinessModule.Common
                 {
                     this.backPictureName = value;
                     OnPropertyChanged("BackPictureName");
+                }
+            }
+        }
+
+        public string FrontPictureRotate
+        {
+            get
+            {
+                return this.frontPictureRotate;
+            }
+
+            set
+            {
+                if (value != this.frontPictureRotate)
+                {
+                    this.frontPictureRotate = value;
+                    OnPropertyChanged("FrontPictureRotate");
+                }
+            }
+        }
+
+        public string BackPictureRotate
+        {
+            get
+            {
+                return this.backPictureRotate;
+            }
+
+            set
+            {
+                if (value != this.backPictureRotate)
+                {
+                    this.backPictureRotate = value;
+                    OnPropertyChanged("BackPictureRotate");
                 }
             }
         }

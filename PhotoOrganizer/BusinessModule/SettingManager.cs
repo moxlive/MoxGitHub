@@ -46,6 +46,8 @@ namespace PhotoOrganizer.BusinessModule
             SaveSetting(Settings.OverviewFolderBasePathStr, setting.OverviewFolderBasePath);
             SaveSetting(Settings.FrontPictureNameStr, setting.FrontPictureName);
             SaveSetting(Settings.BackPictureNameStr, setting.BackPictureName);
+            SaveSetting(Settings.FrontPictureRotateStr, setting.FrontPictureRotate);
+            SaveSetting(Settings.BackPictureRotateStr, setting.BackPictureRotate);
         }
 
         public string ReadSettingString(string settingName)
@@ -76,6 +78,8 @@ namespace PhotoOrganizer.BusinessModule
             setting.OverviewFolderBasePath = ReadSettingString(Settings.OverviewFolderBasePathStr);
             setting.FrontPictureName = ReadSettingString(Settings.FrontPictureNameStr);
             setting.BackPictureName = ReadSettingString(Settings.BackPictureNameStr);
+            setting.FrontPictureRotate = ReadSettingString(Settings.FrontPictureRotateStr);
+            setting.BackPictureRotate = ReadSettingString(Settings.BackPictureRotateStr);
 
         }
 
@@ -83,9 +87,12 @@ namespace PhotoOrganizer.BusinessModule
         {
             var existingElement = parent.SelectSingleNode(string.Format(attSearchPath, settingName));
 
-            if (existingElement != null && existingElement.InnerText != value)
+            if (existingElement != null)
             {
-                existingElement.InnerText = value;
+                if (existingElement.InnerText != value)
+                {
+                    existingElement.InnerText = value;
+                }
             }
             else
             {
