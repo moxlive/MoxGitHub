@@ -54,24 +54,23 @@
                 <StackPanel>
                     <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="291">
                         <Grid Margin="0,10,0,-12.2">
-                            <Label Content="Front Picture:" Margin="20,12,391,240"/>
-                            <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenFrontPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,166,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonChooseFrontPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseFrontPicCommand}" Background="#FFF0F0F0" Margin="351,14,95,241.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Label Content="Back Picture:" Margin="20,39,391,210"/>
-                            <TextBox x:Name="BackPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenBackPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,45,166,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonChooseBackPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseBackPicCommand}" Background="#FFF0F0F0" Margin="351,43,95,212.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Label Content="Output Picture:" Margin="20,69,386,180.2"/>
-                            <TextBox x:Name="OutputPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenOutputPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,73,166,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonChooseOutputPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseOutputPicCommand}" Background="#FFF0F0F0" Margin="351,71,95,184.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding Path=ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="424,15,10,187.6" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-
+                            <Label Content="Front Picture:" Margin="17,7,394,240"/>
+                            <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenFrontPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,15,166,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseFrontPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseFrontPicCommand}" Background="#FFF0F0F0" Margin="351,14,95,237" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Label Content="Back Picture:" Margin="17,41,394,201"/>
+                            <TextBox x:Name="BackPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenBackPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,46,166,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseBackPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseBackPicCommand}" Background="#FFF0F0F0" Margin="351,45,95,206" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Label Content="Output Picture:" Margin="17,71,389,171"/>
+                            <TextBox x:Name="OutputPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenOutputPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,76,166,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseOutputPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseOutputPicCommand}" Background="#FFF0F0F0" Margin="351,74,95,177" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="424,15,20,177" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>
         <StackPanel Margin="0,320,0,0" Background="#FFF0F0F0">
-            <Button x:Name="ButtonApply"  Content="Save Settings" Command="{Binding ApplyCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="392,8,40.4,8" />
+            <Button x:Name="ButtonApply"  Content="Save Settings" Command="{Binding ApplyCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="402,8,30.4,8" />
         </StackPanel>
     </Grid>
 </Window>
