@@ -53,7 +53,7 @@
             <TabItem Header="Manual">
                 <StackPanel>
                     <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="291">
-                        <Grid Margin="0,10,0,-22.8">
+                        <Grid Margin="0,10,0,-12.2">
                             <Label Content="Front Picture:" Margin="20,12,391,240"/>
                             <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenFrontPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,166,0" VerticalAlignment="Top"/>
                             <Button x:Name="ButtonChooseFrontPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseFrontPicCommand}" Background="#FFF0F0F0" Margin="351,14,95,241.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
@@ -63,7 +63,7 @@
                             <Label Content="Output Picture:" Margin="20,69,386,180.2"/>
                             <TextBox x:Name="OutputPictureSelectionTextBox" Text="{Binding Path=ManualPictureCombiner.ChoosenOutputPicPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,73,166,0" VerticalAlignment="Top"/>
                             <Button x:Name="ButtonChooseOutputPic"  Content="Choose" Command="{Binding Path=ManualPictureCombiner.ChooseOutputPicCommand}" Background="#FFF0F0F0" Margin="351,71,95,184.2" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding Path=ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="424,15,10,184.2" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding Path=ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="424,15,10,187.6" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
 
                         </Grid>
                     </GroupBox>
@@ -71,7 +71,7 @@
             </TabItem>
         </TabControl>
         <StackPanel Margin="0,320,0,0" Background="#FFF0F0F0">
-            <Button x:Name="ButtonApply"  Content="Apply" Command="{Binding Path=ApplyCommand}" Background="#FFF0F0F0" Margin="390,15,68,0" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+            <Button x:Name="ButtonApply"  Content="Save Settings" Command="{Binding ApplyCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="392,8,40.4,8" />
         </StackPanel>
     </Grid>
 </Window>

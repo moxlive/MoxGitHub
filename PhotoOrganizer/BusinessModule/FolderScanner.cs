@@ -72,7 +72,8 @@ namespace PhotoOrganizer.BusinessModule
             //scan sequence folder
             FolderNameMatchRule rule4 = new FolderNameMatchRule();
             rule4.RuleName = "ScanSeqNum";
-            rule4.RegExpPattern = @"(\b)?\d+";
+            //start with number, letter in middle is ok, but not end with "_mask"
+            rule4.RegExpPattern = @"(^\d+\w+)(?<!_mask)$";
             rules = new List<IFolderMatchRule>();
             rules.Add(rule4);
             visitors.Add(new FolderVisitor(rules, visitorKey_ScanSeqNum));
@@ -83,15 +84,28 @@ namespace PhotoOrganizer.BusinessModule
 
         public void FullScan()
         {
-            log.LogInfo(string.Format("Start Full Scan, base folder {0}", settings.ScanBasePath));
-            IList<PhotoGroup> groups = FindNewPhotoGroups();
-
-            foreach (PhotoGroup group in groups)
+            if (string.IsNullOrEmpty(settings.ScanBasePath) || string.IsNullOrEmpty(settings.OverviewFolderBasePath))
             {
-                if (NewPhotoGoupHandler != null)
+                log.LogError(string.Format("Full scan error, please check input and output path."));
+                return;
+            }
+         
+            try
+            {
+                log.LogInfo(string.Format("Full scan started, base folder {0}.", settings.ScanBasePath));
+                IList<PhotoGroup> groups = FindNewPhotoGroups();
+
+                foreach (PhotoGroup group in groups)
                 {
-                    NewPhotoGoupHandler.Invoke(group);
+                    if (NewPhotoGoupHandler != null)
+                    {
+                        NewPhotoGoupHandler.Invoke(group);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Full scan failed.", ex);
             }
 
         }
@@ -184,6 +198,12 @@ namespace PhotoOrganizer.BusinessModule
 
         private void WatchChange()
         {
+            if (string.IsNullOrEmpty(scanPath))
+            {
+                log.LogError("Scan path is empty. Cannot start watching folder change.");
+                return;
+            }
+
             var changeWatcher = new System.IO.FileSystemWatcher();
             changeWatcher.Path = scanPath;
             changeWatcher.IncludeSubdirectories = true;

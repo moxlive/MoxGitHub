@@ -70,7 +70,7 @@ namespace PhotoOrganizer.BusinessModule
                 nsmgr.AddNamespace("", "");
                 string xPathString = string.Format(attSearchPath, settingName);
                 XmlNode selected = root.SelectSingleNode(xPathString, nsmgr);
-                log.LogInfo(string.Format("Read Setting {0}={1}.", settingName, selected.InnerText));   
+                log.LogInfo(string.Format("Read Setting {0}={1}", settingName, selected.InnerText));   
                 return selected.InnerText;
             }
             catch(Exception ex)

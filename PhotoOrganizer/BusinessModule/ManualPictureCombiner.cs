@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using System.Drawing;
 using Microsoft.TeamFoundation.MVVM;
+using PhotoOrganizer.BusinessModule.Log;
 
 namespace PhotoOrganizer.BusinessModule
 {
@@ -18,6 +19,7 @@ namespace PhotoOrganizer.BusinessModule
         private string choosenOutputPicPath;
         private PhotoModifier photoModifier;
         private FileWriter fileWriter;
+        private ILogger log;
 
         #region property
         public string ChoosenFrontPicPath
@@ -91,18 +93,39 @@ namespace PhotoOrganizer.BusinessModule
 
         public ManualPictureCombiner(PhotoModifier pm, FileWriter fw)
         {
+            log = FileLogger.CreateLogger("ManualPictureCombiner");
             photoModifier = pm;
-            fileWriter = fw;
+            fileWriter = fw;         
             ChooseFrontPicCommand = new RelayCommand(() => { ChoosenFrontPicPath = UpdateChoosenFilePath() ?? ChoosenFrontPicPath; });
             ChooseBackPicCommand = new RelayCommand(() => { ChoosenBackPicPath = UpdateChoosenFilePath() ?? ChoosenBackPicPath; });
             ChooseOutputPicCommand = new RelayCommand(() => { ChoosenOutputPicPath = UpdateChoosenFilePath() ?? ChoosenOutputPicPath; });
-            CombinePicCommand = new RelayCommand(() => {
+            CombinePicCommand = new RelayCommand(CombinePicture);
+        }
+
+        private void CombinePicture()
+        {
+            log.LogInfo(string.Format("Start manual combine picture. Front Picture={0}, Back Picture={1}, New Picture={2}", 
+                ChoosenFrontPicPath, ChoosenBackPicPath, ChoosenOutputPicPath));
+            if (string.IsNullOrEmpty(ChoosenFrontPicPath)
+                || string.IsNullOrEmpty(ChoosenBackPicPath)
+                || string.IsNullOrEmpty(ChoosenOutputPicPath))
+            {
+                log.LogError("Picture path shall not be empty.");
+            }
+
+            try
+            {
                 Bitmap newPic = photoModifier.CombinePicture(ChoosenFrontPicPath, ChoosenBackPicPath);
                 if (newPic != null)
                 {
                     fileWriter.SavePic(ChoosenOutputPicPath, newPic);
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Create picture error.", ex);
+            }
+
         }
 
         private string UpdateChoosenFilePath()
