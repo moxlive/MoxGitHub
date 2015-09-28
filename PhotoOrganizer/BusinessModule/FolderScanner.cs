@@ -91,6 +91,14 @@ namespace PhotoOrganizer.BusinessModule
                 return;
             }
 
+            if (string.IsNullOrEmpty(settings.FrontPictureName) || string.IsNullOrEmpty(settings.BackPictureName))
+            {
+                msg = string.Format("Full scan error, please check picture name.");
+                msgDispatcher.PopulateMessage(msg);
+                log.LogError(msg);
+                return;
+            }
+
             msg = string.Format("Full scan started, base folder {0}.", settings.ScanBasePath);
             log.LogInfo(msg);
             msgDispatcher.PopulateMessage(msg);
