@@ -26,14 +26,13 @@ namespace PhotoOrganizer.BusinessModule
 
         private List<FolderVisitor> visitors;
         private Settings settings;
-        private string frontPicName = "089.jpg";
-        private string backPicName = "090.jpg";
-        private string scanPath = @"D:\";
         private ILogger log;
+        private IMessageDispatcher msgDispatcher;
 
-        public FolderScanner()
+        public FolderScanner(IMessageDispatcher msg)
         {
             log = FileLogger.CreateLogger("FolderScanner");
+            msgDispatcher = msg;
         }
 
         public Action<PhotoGroup> NewPhotoGoupHandler;
@@ -41,7 +40,6 @@ namespace PhotoOrganizer.BusinessModule
         public void InitVisitors(Settings settings)
         {
             this.settings = settings;
-            LoadSettings();
             visitors = new List<FolderVisitor>();
             List<IFolderMatchRule> rules = new List<IFolderMatchRule>();
 
@@ -82,32 +80,52 @@ namespace PhotoOrganizer.BusinessModule
 
         }
 
-        public void FullScan()
+        public async void FullScan(Action callback)
         {
+            string msg;
             if (string.IsNullOrEmpty(settings.ScanBasePath) || string.IsNullOrEmpty(settings.OverviewFolderBasePath))
             {
-                log.LogError(string.Format("Full scan error, please check input and output path."));
+                msg = string.Format("Full scan error, please check input and output path.");
+                msgDispatcher.PopulateMessage(msg);
+                log.LogError(msg);
                 return;
             }
-         
-            try
-            {
-                log.LogInfo(string.Format("Full scan started, base folder {0}.", settings.ScanBasePath));
-                IList<PhotoGroup> groups = FindNewPhotoGroups();
 
-                foreach (PhotoGroup group in groups)
+            msg = string.Format("Full scan started, base folder {0}.", settings.ScanBasePath);
+            log.LogInfo(msg);
+            msgDispatcher.PopulateMessage(msg);
+
+            await Task.Factory.StartNew(() =>
+            {                     
+                try
                 {
-                    if (NewPhotoGoupHandler != null)
+                    IList<PhotoGroup> groups = FindNewPhotoGroups();
+                    foreach (PhotoGroup group in groups)
                     {
-                        NewPhotoGoupHandler.Invoke(group);
+                        if (NewPhotoGoupHandler != null)
+                        {
+                            NewPhotoGoupHandler.Invoke(group);
+                        }
                     }
+                
                 }
-            }
-            catch (Exception ex)
+                catch (Exception ex)
+                {
+                    log.LogException("Full scan failed.", ex);
+                }
+            });
+
+            msg = string.Format("Full scan completed.");
+            log.LogInfo(msg);
+            msgDispatcher.PopulateMessage(msg);
+
+            if (callback != null)
             {
-                log.LogException("Full scan failed.", ex);
+                callback.Invoke();
             }
 
+            //Force collect bitmap left in memory.
+            GC.Collect();
         }
 
         #region private helper
@@ -123,7 +141,7 @@ namespace PhotoOrganizer.BusinessModule
             Queue<VisitorItem> children = new Queue<VisitorItem>();
             VisitorItem start = new VisitorItem() 
             { 
-                CurrentDir = new DirectoryInfo(scanPath),  
+                CurrentDir = new DirectoryInfo(settings.ScanBasePath),  
                 ActionVisitorLevel = 0
             };           
 
@@ -160,9 +178,9 @@ namespace PhotoOrganizer.BusinessModule
         {
             DirectoryInfo dir = item.CurrentDir;
 
-            if (!File.Exists(dir.FullName + "\\" + frontPicName) || !File.Exists(dir.FullName + "\\" + frontPicName))
+            if (!File.Exists(dir.FullName + "\\" + settings.FrontPictureName) || !File.Exists(dir.FullName + "\\" + settings.FrontPictureName))
             {
-                log.LogInfo(string.Format("Did not find {0} or {1} in folder {2}.", frontPicName, backPicName, dir.FullName));
+                log.LogInfo(string.Format("Did not find {0} or {1} in folder {2}.", settings.FrontPictureName, settings.BackPictureName, dir.FullName));
                 return null;
                 //log
             }
@@ -174,43 +192,36 @@ namespace PhotoOrganizer.BusinessModule
                 ScanSeqNum = item.Info[visitorKey_ScanSeqNum] as string,
                 Front = new Photo()
                 {
-                   Name = frontPicName,
-                   FullPath = item.CurrentDir.FullName + "\\" + frontPicName
+                    Name = settings.FrontPictureName,
+                    FullPath = item.CurrentDir.FullName + "\\" + settings.FrontPictureName
                 },
                 Back = new Photo()
                 {
-                    Name = backPicName,
-                    FullPath = item.CurrentDir.FullName + "\\" + backPicName
+                    Name = settings.BackPictureName,
+                    FullPath = item.CurrentDir.FullName + "\\" + settings.BackPictureName
                 }
             };
             
-            log.LogInfo(string.Format("Created photo group with {0} and {1} in folder {2}. Date={3}, CustomSeqNum={4}, ScanSeqNum={5}", 
-                frontPicName, backPicName, dir.FullName, pg.Date, pg.CustomSeqNum, pg.ScanSeqNum));  
+            log.LogInfo(string.Format("Created photo group with {0} and {1} in folder {2}. Date={3}, CustomSeqNum={4}, ScanSeqNum={5}",
+                settings.FrontPictureName, settings.BackPictureName, dir.FullName, pg.Date, pg.CustomSeqNum, pg.ScanSeqNum));  
             return pg;
-        }
-
-        private void LoadSettings()
-        {
-            frontPicName = settings.FrontPictureName;
-            backPicName = settings.BackPictureName;
-            scanPath = settings.ScanBasePath;
         }
 
         private void WatchChange()
         {
-            if (string.IsNullOrEmpty(scanPath))
+            if (string.IsNullOrEmpty(settings.ScanBasePath))
             {
                 log.LogError("Scan path is empty. Cannot start watching folder change.");
                 return;
             }
 
             var changeWatcher = new System.IO.FileSystemWatcher();
-            changeWatcher.Path = scanPath;
+            changeWatcher.Path = settings.ScanBasePath;
             changeWatcher.IncludeSubdirectories = true;
             changeWatcher.Filter = "*.jpg";
             changeWatcher.Created += ChangeHandler;
             changeWatcher.EnableRaisingEvents = true;
-            log.LogInfo(string.Format("Start watching change in folder {0}", scanPath));
+            log.LogInfo(string.Format("Start watching change in folder {0}", settings.ScanBasePath));
         }
 
         private void ChangeHandler(object sender, FileSystemEventArgs e)
@@ -220,13 +231,15 @@ namespace PhotoOrganizer.BusinessModule
             string directoryPath = Path.GetDirectoryName(e.FullPath); //D:\Programs\Github\PhotoOrganizer\TestFolder\RAW Scans\20150705\C0001\006
 
             //check if both front and back picture exist
-            if (!((fileName == frontPicName && File.Exists(directoryPath + "\\" + backPicName))
-                || (fileName == backPicName && File.Exists(directoryPath + "\\" + frontPicName))))
+            if (!((fileName == settings.FrontPictureName && File.Exists(directoryPath + "\\" + settings.BackPictureName))
+                || (fileName == settings.BackPictureName && File.Exists(directoryPath + "\\" + settings.FrontPictureName))))
             {
                 return;
             }
 
-            log.LogInfo(string.Format("Locate new picture {0} and {1} in {2}", backPicName, frontPicName, directoryPath));
+            string msg = string.Format("Locate new picture {0} and {1} in {2}", settings.BackPictureName, settings.FrontPictureName, directoryPath);
+            log.LogInfo(msg);
+            msgDispatcher.PopulateMessage(msg);
             //if folder hierarchy level
             string[] folderNames = Path.GetDirectoryName(relativePath).Split(new char[] { '\\', '/' });
             if (folderNames.Length != visitors.Count)

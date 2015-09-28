@@ -11,11 +11,11 @@ namespace PhotoOrganizer.BusinessModule
     {
         void SaveSetting(string settingName, string value);
 
-        void SaveSetting(Settings setting);
+        void SaveSettings(Settings setting);
 
         string ReadSettingString(string settingName);
 
-        void ReadSetting(Settings setting);
+        void ReadSettings(Settings setting);
 
     }
 }

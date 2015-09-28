@@ -36,7 +36,22 @@ namespace PhotoOrganizer.BusinessModule
             Image bi = Image.FromFile(backPicPath);
             bi.RotateFlip(GetRotateType(settings.BackPictureRotate));
 
-            Bitmap newPic = new Bitmap(fi.Width + bi.Width, Math.Max(fi.Height, bi.Height));
+            Bitmap newPic;
+
+            try
+            { 
+                newPic = new Bitmap(fi.Width + bi.Width, Math.Max(fi.Height, bi.Height));
+            }
+            catch (ArgumentException ex)
+            {
+                //for some reason even BitMap is placed in Using(), process still runs out of memory(1G).
+                //try to force garbage collection fixes this issue
+                //http://stackoverflow.com/questions/748777/run-gc-collect-synchronously
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                newPic = new Bitmap(fi.Width + bi.Width, Math.Max(fi.Height, bi.Height));
+            }
+
             using (Graphics g = Graphics.FromImage(newPic))
             {
                 //todo, configurable

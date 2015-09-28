@@ -19,29 +19,37 @@ namespace PhotoOrganizer.BusinessModule
         public Settings Settings { get; private set; }
         public ManualPictureCombiner ManualPictureCombiner { get; private set; }
         public FolderScanner FolderScanner { get; private set; }
+        public IMessageDispatcher MessageDispatcher { get; private set; }
 
         public WorkFlowController()
         {
             Settings = new Settings();
         }
 
-        public void Initialize()
+        public void Initialize(MessageProcessor messageHandler)
         {
+            //ViewModel require Settings and ManualPictureCombiner
             this.SettingManager = new SettingManager();
-            this.SettingManager.ReadSetting(Settings);
+            SettingManager.ReadSettings(Settings);
+
+            MessageDispatcher = new MessageDispatcher();
+            MessageDispatcher.MessageHandler += messageHandler;
 
             photoModifier = new PhotoModifier(Settings);
-            fileWriter = new FileWriter(Settings);
-
-            FolderScanner = new FolderScanner();
+            fileWriter = new FileWriter(Settings, MessageDispatcher);
+            ManualPictureCombiner = new ManualPictureCombiner(photoModifier, fileWriter, MessageDispatcher);   
+            FolderScanner = new FolderScanner(MessageDispatcher);
             FolderScanner.InitVisitors(Settings);
-            FolderScanner.NewPhotoGoupHandler = (photoGroup) =>
-            {
-                Bitmap newPic = photoModifier.CombinePicture(photoGroup);
-                fileWriter.SavePic(photoGroup, newPic);
-            };
+            FolderScanner.NewPhotoGoupHandler = HandlePictureGroup;
 
-            ManualPictureCombiner = new ManualPictureCombiner(photoModifier, fileWriter);
+        }
+
+        private void HandlePictureGroup(PhotoGroup photoGroup)
+        {
+            using (Bitmap newPic = photoModifier.CombinePicture(photoGroup))
+            {
+                fileWriter.SavePic(photoGroup, newPic);
+            }
         }
         
     }

@@ -20,8 +20,10 @@ namespace PhotoOrganizer.BusinessModule
         private PhotoModifier photoModifier;
         private FileWriter fileWriter;
         private ILogger log;
-
+        private IMessageDispatcher messageDispatcher;
+        
         #region property
+
         public string ChoosenFrontPicPath
         {
             get
@@ -91,41 +93,57 @@ namespace PhotoOrganizer.BusinessModule
 
         #endregion
 
-        public ManualPictureCombiner(PhotoModifier pm, FileWriter fw)
+        public ManualPictureCombiner(PhotoModifier pm, FileWriter fw, IMessageDispatcher md)
         {
             log = FileLogger.CreateLogger("ManualPictureCombiner");
             photoModifier = pm;
-            fileWriter = fw;         
+            fileWriter = fw;
+            messageDispatcher = md;
             ChooseFrontPicCommand = new RelayCommand(() => { ChoosenFrontPicPath = UpdateChoosenFilePath() ?? ChoosenFrontPicPath; });
             ChooseBackPicCommand = new RelayCommand(() => { ChoosenBackPicPath = UpdateChoosenFilePath() ?? ChoosenBackPicPath; });
             ChooseOutputPicCommand = new RelayCommand(() => { ChoosenOutputPicPath = UpdateChoosenFilePath() ?? ChoosenOutputPicPath; });
             CombinePicCommand = new RelayCommand(CombinePicture);
         }
 
-        private void CombinePicture()
+        private async void CombinePicture()
         {
-            log.LogInfo(string.Format("Start manual combine picture. Front Picture={0}, Back Picture={1}, New Picture={2}", 
-                ChoosenFrontPicPath, ChoosenBackPicPath, ChoosenOutputPicPath));
+            string msg = string.Format("Combine picture started. Front Picture={0}, Back Picture={1}, New Picture={2}",
+                ChoosenFrontPicPath, ChoosenBackPicPath, ChoosenOutputPicPath);
+            log.LogInfo(msg);
+            messageDispatcher.PopulateMessage(msg);
+
             if (string.IsNullOrEmpty(ChoosenFrontPicPath)
                 || string.IsNullOrEmpty(ChoosenBackPicPath)
                 || string.IsNullOrEmpty(ChoosenOutputPicPath))
             {
                 log.LogError("Picture path shall not be empty.");
+                messageDispatcher.PopulateMessage("Picture path shall not be empty.");
+                return;
             }
 
-            try
-            {
-                Bitmap newPic = photoModifier.CombinePicture(ChoosenFrontPicPath, ChoosenBackPicPath);
-                if (newPic != null)
+            await Task.Factory.StartNew(() => {
+                try
                 {
-                    fileWriter.SavePic(ChoosenOutputPicPath, newPic);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.LogException("Create picture error.", ex);
-            }
+                    using (Bitmap newPic = photoModifier.CombinePicture(ChoosenFrontPicPath, ChoosenBackPicPath))
+                    {
+                        if (newPic != null)
+                        {
+                            fileWriter.SavePic(ChoosenOutputPicPath, newPic);
+                        }
+                    }
 
+                    log.LogInfo("Combine picture completed.");
+                    messageDispatcher.PopulateMessage("Combine picture completed.");
+                }
+                catch (Exception ex)
+                {
+                    log.LogException("Combine picture error.", ex);
+                    messageDispatcher.PopulateMessage("Combine picture error.");
+                }
+            });
+
+            //Force collect bitmap left in memory.
+            GC.Collect();
         }
 
         private string UpdateChoosenFilePath()

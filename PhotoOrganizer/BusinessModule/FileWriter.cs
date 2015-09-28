@@ -14,15 +14,15 @@ namespace PhotoOrganizer.BusinessModule
 {
     public class FileWriter
     {
-        string outputDir = @"D:\Programs\Github\PhotoOrganizer\TestFolder\";
         Settings setting;
         ILogger log;
+        IMessageDispatcher msgDispatcher;
 
-        public FileWriter(Settings settings)
+        public FileWriter(Settings settings, IMessageDispatcher msg)
         {
             log = FileLogger.CreateLogger("FileWriter");
+            msgDispatcher = msg;
             this.setting = settings;
-            LoadSettings();
         }
 
         public bool SavePic(string outputPath, Bitmap newPic)
@@ -39,13 +39,10 @@ namespace PhotoOrganizer.BusinessModule
                 log.LogException(string.Format("Save {0} exception.", outputPath), e);
                 return false;
             }
-            finally
-            {
-                newPic.Dispose();
-            }
 
-            log.LogInfo(string.Format("Save {0} successfully.", outputPath));
-            
+            string msg = string.Format("Save {0} successfully.", outputPath);
+            log.LogInfo(msg);
+            msgDispatcher.PopulateMessage(msg);
             return true;
         }
 
@@ -69,15 +66,10 @@ namespace PhotoOrganizer.BusinessModule
 
         private string BuildPath(PhotoGroup group)
         {
-            string outputPath = string.Format("{0}\\{1}\\{2}\\{3}\\", outputDir, "Scan Overview", group.Date.ToString("yyyyMMdd"), group.CustomSeqNum);
+            string outputPath = string.Format("{0}\\{1}\\{2}\\{3}\\", setting.OverviewFolderBasePath, "Scan Overview", group.Date.ToString("yyyyMMdd"), group.CustomSeqNum);
             outputPath += group.ScanSeqNum + ".jpg";
             return outputPath;
         }
 
-        private void LoadSettings()
-        {
-            outputDir = setting.OverviewFolderBasePath;
-
-        }
     }
 }

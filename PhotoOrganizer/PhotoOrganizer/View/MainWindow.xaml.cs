@@ -32,7 +32,7 @@ namespace PhotoOrganizer
 
         public MainWindow()
         {
-            InitializeComponent();          
+            InitializeComponent();        
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -59,6 +59,11 @@ namespace PhotoOrganizer
                 taskbarIcon.ShowBalloonTip("3DBean", "I'm here", BalloonIcon.Info);
                 this.ShowInTaskbar = false;
             }
+        }
+
+        public void PopTaskBarMessage(string message, BalloonIcon category = BalloonIcon.Info)
+        {
+            taskbarIcon.ShowBalloonTip("3DBean", message, category);
         }
         /// <summary>
         /// only for testing

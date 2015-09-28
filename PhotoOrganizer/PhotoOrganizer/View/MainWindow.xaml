@@ -70,7 +70,10 @@
             </TabItem>
         </TabControl>
         <StackPanel Margin="0,320,0,0" Background="#FFF0F0F0">
-            <Button x:Name="ButtonApply"  Content="Save Settings" Command="{Binding ApplyCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="402,8,30.4,8" />
+            <Grid>
+                <Label x:Name="StatusBox" Content="{Binding StatusMessage}" Margin="18,9,127.4,9" />
+                <Button x:Name="ButtonApplySetting"  Content="Save Settings" Command="{Binding ApplySettingCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="408,8,24.4,8" />
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>

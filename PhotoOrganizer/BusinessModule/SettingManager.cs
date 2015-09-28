@@ -48,14 +48,14 @@ namespace PhotoOrganizer.BusinessModule
             }
         }
 
-        public void SaveSetting(Settings setting)
+        public void SaveSettings(Settings setting)
         {
-            SaveSetting(Settings.ScanBasePathStr, setting.ScanBasePath);
-            SaveSetting(Settings.OverviewFolderBasePathStr, setting.OverviewFolderBasePath);
-            SaveSetting(Settings.FrontPictureNameStr, setting.FrontPictureName);
-            SaveSetting(Settings.BackPictureNameStr, setting.BackPictureName);
-            SaveSetting(Settings.FrontPictureRotateStr, setting.FrontPictureRotate);
-            SaveSetting(Settings.BackPictureRotateStr, setting.BackPictureRotate);
+                SaveSetting(Settings.ScanBasePathStr, setting.ScanBasePath);
+                SaveSetting(Settings.OverviewFolderBasePathStr, setting.OverviewFolderBasePath);
+                SaveSetting(Settings.FrontPictureNameStr, setting.FrontPictureName);
+                SaveSetting(Settings.BackPictureNameStr, setting.BackPictureName);
+                SaveSetting(Settings.FrontPictureRotateStr, setting.FrontPictureRotate);
+                SaveSetting(Settings.BackPictureRotateStr, setting.BackPictureRotate);       
         }
 
         public string ReadSettingString(string settingName)
@@ -78,21 +78,20 @@ namespace PhotoOrganizer.BusinessModule
                 log.LogException(string.Format("Read Setting {0} error.", settingName), ex);     
             }
 
-             return "";            
+            return "";            
         }
 
-        public void ReadSetting(Settings setting)
+        public void ReadSettings(Settings setting)
         {
-            setting.ScanBasePath = ReadSettingString(Settings.ScanBasePathStr);
-            setting.OverviewFolderBasePath = ReadSettingString(Settings.OverviewFolderBasePathStr);
-            setting.FrontPictureName = ReadSettingString(Settings.FrontPictureNameStr);
-            setting.BackPictureName = ReadSettingString(Settings.BackPictureNameStr);
-            setting.FrontPictureRotate = ReadSettingString(Settings.FrontPictureRotateStr);
-            setting.BackPictureRotate = ReadSettingString(Settings.BackPictureRotateStr);
-
+                setting.ScanBasePath = ReadSettingString(Settings.ScanBasePathStr);
+                setting.OverviewFolderBasePath = ReadSettingString(Settings.OverviewFolderBasePathStr);
+                setting.FrontPictureName = ReadSettingString(Settings.FrontPictureNameStr);
+                setting.BackPictureName = ReadSettingString(Settings.BackPictureNameStr);
+                setting.FrontPictureRotate = ReadSettingString(Settings.FrontPictureRotateStr);
+                setting.BackPictureRotate = ReadSettingString(Settings.BackPictureRotateStr);
         }
 
-        private static void CreateOrUpdateElement(string settingName, string value, XmlDocument doc, XmlNode parent)
+        private void CreateOrUpdateElement(string settingName, string value, XmlDocument doc, XmlNode parent)
         {
             var existingElement = parent.SelectSingleNode(string.Format(attSearchPath, settingName));
 
@@ -110,6 +109,9 @@ namespace PhotoOrganizer.BusinessModule
                 element.InnerText = value;
                 parent.AppendChild(element);
             }
+            
+            log.LogInfo(string.Format("Saved Setting {0}={1}", settingName, value));   
+               
         }
        
     }

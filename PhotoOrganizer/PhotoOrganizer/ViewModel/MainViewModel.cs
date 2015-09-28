@@ -18,7 +18,11 @@ namespace PhotoOrganizer.ViewModel
         private WorkFlowController workflowController;
         private Settings setting;
         private ManualPictureCombiner manualPictureCombiner;
+        private string statusMessage;
+        private MainWindow view;
+        private IMessageDispatcher messageDispacher;
 
+        #region Binding
         public Settings Setting
         {
             get { return setting; }
@@ -31,23 +35,60 @@ namespace PhotoOrganizer.ViewModel
             private set { manualPictureCombiner = value; }
         }
 
+        public string StatusMessage
+        {
+            get { return statusMessage; }
+            private set 
+            { 
+                statusMessage = value;
+                OnPropertyChanged("StatusMessage");
+            }
+        }
+
+        #endregion
+
         internal MainViewModel(MainWindow control)
         {
+            view = control;
             control.DataContext = this;
-
             workflowController = new WorkFlowController();
-            workflowController.Initialize();
+            workflowController.Initialize(PopulateMessage);
             setting = workflowController.Settings;
             manualPictureCombiner = workflowController.ManualPictureCombiner;
 
-            ApplyCommand = new RelayCommand(ApplyCommand_Executed);
-            FullScanCommand = new RelayCommand(FullScanCommand_Executed);
+            ApplySettingCommand = new RelayCommand(ApplySettingCommand_Executed);
+            FullScanCommand = new RelayCommand(FullScanCommand_Executed, CanDoFullScan);
+        }
 
+        public void PopulateMessage(string message)
+        {  
+            if (Application.Current.Dispatcher.CheckAccess())
+            {
+                UpdateUI(message);
+            }
+            else
+            {
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { UpdateUI(message); }), 
+                    null);
+            }
+        }
+
+        private void UpdateUI(string message)
+        {
+            if (view.WindowState == WindowState.Minimized)
+            {
+                view.PopTaskBarMessage(message);
+            }
+            else
+            {
+                StatusMessage = message;
+            }
         }
 
         #region commands
 
-        public ICommand ApplyCommand
+        public ICommand ApplySettingCommand
         {
             get;
             private set;
@@ -58,17 +99,31 @@ namespace PhotoOrganizer.ViewModel
             get;
             private set;
         }
-      
-        private void ApplyCommand_Executed()
+
+        public ICommand CombinePictureCommand
         {
-            workflowController.SettingManager.SaveSetting(this.Setting);
+            get;
+            private set;
+        }
+        
+        private bool enableFullScanCommand = true;
+
+        private void ApplySettingCommand_Executed()
+        {            
+            workflowController.SettingManager.SaveSettings(this.Setting);
         }
 
-        private void FullScanCommand_Executed()
+        private void FullScanCommand_Executed(object state)
         {
-            workflowController.FolderScanner.FullScan();
+            enableFullScanCommand = false;
+            workflowController.FolderScanner.FullScan(() => { enableFullScanCommand = true; });            
         }
-             
+
+        private bool CanDoFullScan(object state)
+        {
+            return enableFullScanCommand;
+        }
+
         #endregion commands
 
         #region helpers
