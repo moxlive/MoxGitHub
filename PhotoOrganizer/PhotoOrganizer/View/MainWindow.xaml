@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
         Title="Photo Organizer" Height="400" Width="525" Loaded="Window_Loaded"
-        Icon="pack://application:,,,/PhotoOrganizer;component/Resources/3DBean.ico" StateChanged="Window_StateChanged">
+        Icon="pack://application:,,,/PhotoOrganizer;component/Resources/3DBean.ico" StateChanged="Window_StateChanged" ResizeMode="CanMinimize">
     <Window.Resources>
         <tb:TaskbarIcon x:Key="NotifyIcon" IconSource="pack://application:,,,/PhotoOrganizer;component/Resources/3DBean.ico">
             <tb:TaskbarIcon.TrayToolTip>
@@ -14,32 +14,32 @@
         </tb:TaskbarIcon>
     </Window.Resources>
     <Grid Background="#FFF0F0F0">
-        <TabControl HorizontalAlignment="Left" Height="323" VerticalAlignment="Top" Width="518" Background="#FFF0F0F0">
-            <TabItem Header="General" Margin="0,0,-0.2,0">
+        <TabControl HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Width="510" Background="#FFF0F0F0">
+            <TabItem Header="General" Margin="0,0,-0.2,0" HorizontalAlignment="Left" Width="53">
                 <StackPanel Margin="0,0,0,0">
-                    <Grid Height="300" Margin="0,0,0,0">
-                        <GroupBox Header="Settings" Margin="10,0,9.8,181">
+                    <Grid Height="276" Margin="0,0,-0.2,0">
+                        <GroupBox Header="Settings" Margin="0,0,0,157">
                             <Grid Margin="0,10,0,7.6">
                                 <Label Content="Scan Path:" Margin="20,12,371,40.2"/>
                                 <TextBox x:Name="ScanPathTextBox" Text="{Binding Path=Setting.ScanBasePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="114,15,94,0" VerticalAlignment="Top"/>
                                 <Label Content="Output Path:" Margin="20,39,371,10.2"/>
                                 <TextBox x:Name="OutputPathTextBox" Text="{Binding Path=Setting.OverviewFolderBasePath, UpdateSourceTrigger=LostFocus}" Margin="114,45,94,0" VerticalAlignment="Top"/>
-                                <Button x:Name="ButtonScan"  Content="Scan" Command="{Binding Path=FullScanCommand}" Background="#FFF0F0F0" Margin="416,10,18,12.2" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                                <Button x:Name="ButtonScan"  Content="Scan" Command="{Binding Path=FullScanCommand}" Background="#FFF0F0F0" Margin="407,10,10,12.2" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Picture" Margin="10,124,9.8,10">
+                        <GroupBox Header="Picture" Margin="0,124,0,10">
                             <Grid Margin="0,0,0,0">
-                                <Label Content="Front Picture Name:" Margin="20,10,340,104"/>
+                                <Label Content="Front Picture Name:" Margin="20,14,340,82" RenderTransformOrigin="0.653,0.708"/>
                                 <TextBox x:Name="FrontPictureNameTextBox" Text="{Binding Setting.FrontPictureName, UpdateSourceTrigger=LostFocus}" Margin="155,16,178,0" VerticalAlignment="Top"/>
-                                <Label Content="Back Picture Name:" Margin="20,45,337,72"/>
+                                <Label Content="Back Picture Name:" Margin="20,49,337,47"/>
                                 <TextBox x:Name="BackPictureNameTextBox" Text="{Binding Setting.BackPictureName, UpdateSourceTrigger=LostFocus}" Margin="155,51,178,0" VerticalAlignment="Top"/>
-                                <ComboBox x:Name="FrontPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.FrontPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="363,14,0,0" VerticalAlignment="Top" Width="96" Height="20">
+                                <ComboBox x:Name="FrontPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.FrontPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="374,14,0,0" VerticalAlignment="Top" Width="96" Height="20">
                                     <ComboBoxItem Content="0"/>
                                     <ComboBoxItem Content="90"/>
                                     <ComboBoxItem Content="180"/>
                                     <ComboBoxItem Content="270"/>
                                 </ComboBox>
-                                <ComboBox x:Name="BackPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.BackPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="363,49,0,0" VerticalAlignment="Top" Width="96" Height="20">
+                                <ComboBox x:Name="BackPicRotate" SelectedValuePath="Content" SelectedValue="{Binding Setting.BackPictureRotate, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="374,49,0,0" VerticalAlignment="Top" Width="96" Height="20">
                                     <ComboBoxItem Content="0"/>
                                     <ComboBoxItem Content="90"/>
                                     <ComboBoxItem Content="180"/>
@@ -52,27 +52,27 @@
             </TabItem>
             <TabItem Header="Manual">
                 <StackPanel>
-                    <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="291">
-                        <Grid Margin="0,10,0,-12.2">
-                            <Label Content="Front Picture:" Margin="17,7,394,240"/>
-                            <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenFrontPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,15,166,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonChooseFrontPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseFrontPicCommand}" Background="#FFF0F0F0" Margin="351,14,95,237" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Label Content="Back Picture:" Margin="17,41,394,201"/>
-                            <TextBox x:Name="BackPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenBackPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,46,166,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonChooseBackPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseBackPicCommand}" Background="#FFF0F0F0" Margin="351,45,95,206" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Label Content="Output Picture:" Margin="17,71,389,171"/>
-                            <TextBox x:Name="OutputPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenOutputPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,76,166,0" VerticalAlignment="Top"/>
-                            <Button x:Name="ButtonChooseOutputPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseOutputPicCommand}" Background="#FFF0F0F0" Margin="351,74,95,177" Height="20" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
-                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="424,15,20,177" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                    <GroupBox Header="Select Picture" Margin="0,0,-0.2,100" Height="268">
+                        <Grid Margin="0,10,0,0">
+                            <Label Content="Front Picture:" Margin="17,7,394,194.6"/>
+                            <TextBox x:Name="FrontPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenFrontPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,15,162,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseFrontPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseFrontPicCommand}" Background="#FFF0F0F0" Margin="351,15,89,200.6" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Label Content="Back Picture:" Margin="17,41,394,164.6"/>
+                            <TextBox x:Name="BackPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenBackPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,46,162,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseBackPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseBackPicCommand}" Background="#FFF0F0F0" Margin="351,45,89,170.6" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Label Content="Output Picture:" Margin="17,71,389,133.6"/>
+                            <TextBox x:Name="OutputPictureSelectionTextBox" Text="{Binding ManualPictureCombiner.ChoosenOutputPicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="114,76,162,0" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonChooseOutputPic"  Content="Choose" Command="{Binding ManualPictureCombiner.ChooseOutputPicCommand}" Background="#FFF0F0F0" Margin="351,75,89,140.6" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
+                            <Button x:Name="ButtonCombinePic"  Content="Combine" Command="{Binding ManualPictureCombiner.CombinePicCommand}" Background="#FFF0F0F0" Margin="420,16,10,171.6" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <StackPanel Margin="0,320,0,0" Background="#FFF0F0F0">
-            <Grid>
-                <Label x:Name="StatusBox" Content="{Binding StatusMessage}" Margin="18,9,127.4,9" />
-                <Button x:Name="ButtonApplySetting"  Content="Save Settings" Command="{Binding ApplySettingCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="408,8,24.4,8" />
+        <StackPanel Margin="0,305,0.4,0.4" Background="#FFF0F0F0">
+            <Grid Margin="0,0,0.4,0" Height="63">
+                <TextBlock x:Name="StatusBox" Text="{Binding StatusMessage}" TextWrapping="WrapWithOverflow" Margin="10,7,100,2" />
+                <Button x:Name="ButtonApplySetting"  Content="Save Settings" Command="{Binding ApplySettingCommand}" Background="#FFF0F0F0" Height="28" RenderTransformOrigin="1.058,0.57" HorizontalContentAlignment="Center" Margin="0,0,7.4,15" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="79" />
             </Grid>
         </StackPanel>
     </Grid>

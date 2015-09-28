@@ -3,4 +3,6 @@
   <SettingNode SettingName="ScanBasePath">D:\Programs\Github\PhotoOrganizer\TestFolder\</SettingNode>
   <SettingNode SettingName="FrontPictureName">089.jpg</SettingNode>
   <SettingNode SettingName="BackPictureName">090.jpg</SettingNode>
+  <SettingNode SettingName="FrontPictureRotate">90</SettingNode>
+  <SettingNode SettingName="BackPictureRotate">270</SettingNode>
 </Settings>
