@@ -223,13 +223,26 @@ namespace PhotoOrganizer.BusinessModule
                 return;
             }
 
-            var changeWatcher = new System.IO.FileSystemWatcher();
-            changeWatcher.Path = settings.ScanBasePath;
-            changeWatcher.IncludeSubdirectories = true;
-            changeWatcher.Filter = "*.jpg";
-            changeWatcher.Created += ChangeHandler;
-            changeWatcher.EnableRaisingEvents = true;
-            log.LogInfo(string.Format("Start watching change in folder {0}", settings.ScanBasePath));
+            try
+            {
+                var changeWatcher = new System.IO.FileSystemWatcher();
+                changeWatcher.Path = settings.ScanBasePath;
+                changeWatcher.IncludeSubdirectories = true;
+                changeWatcher.Filter = "*.jpg";
+                changeWatcher.Created += ChangeHandler;
+                changeWatcher.EnableRaisingEvents = true;
+                log.LogInfo(string.Format("Start watching change in folder {0}", settings.ScanBasePath));
+            }
+            catch (ArgumentException ae)
+            {
+                string msg = string.Format("Watching folder {0} is not valid, please indicate a valid folder and restart application", settings.ScanBasePath);
+                log.LogError(msg);
+                msgDispatcher.PopulateMessage(msg);
+            }
+            catch (Exception e)
+            {
+                log.LogException("Start watching change exception. ", e);
+            }
         }
 
         private void ChangeHandler(object sender, FileSystemEventArgs e)
